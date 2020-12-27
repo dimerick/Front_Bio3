@@ -1,0 +1,81 @@
+<div id="info-layer" >
+  
+  <!-- [ngClass]="{'hide-element':hideInfoLayer}" -->
+
+  <div class="close-info-layer">
+    <i class="fa fa-times" aria-hidden="true" (click)="closeInfoLayer()"></i>
+  </div>
+
+  <div id="data-info-layer"></div>
+  
+  
+</div>
+
+<div id="info-map" >
+  
+  <!-- [ngClass]="{'hide-element':hideInfoLayer}" -->
+
+  
+
+  <div id="data-info-map">
+    initTop: {{initTop}}<br>
+    initLeft: {{initLeft}}<br>
+    actTop: {{actTop}}<br>
+    actLeft: {{actLeft}}<br>
+    initialZoom: {{initialZoom}}<br>
+    initialZoom: {{initialZoom}}<br>
+    zoom act: {{lastZoom}}<br>
+    zoom scaleDiff: {{scaleDiff}}<br>
+  </div>
+  
+  
+</div>
+
+<!-- <div id="info-layer" class="pos-top pos-right show-info-layer search-box bg--white border--bottom" data-animation="from-top"
+      [ngClass]="{'notification--reveal':showInfoLayerActive}" [ngClass]="{'notification--dismissed':false}">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Show Info Layer</h1>
+          <button>Click me</button>
+    
+          <div class="map-container">
+            <div class="map-frame">
+              <div id="map-mini" leaflet [leafletOptions]="options" [leafletLayersControl]="layersControl"
+                [leafletLayersControlOptions]="layersControlOptions" [leafletLayers]="layers"
+                (leafletMapReady)="onMapReady($event)" (leafletMapZoomEnd)="onMapZoomEnd($event)"></div>
+          
+            </div>
+          </div>
+    
+        </div>
+      </div>
+      
+      <div class="notification-close-cross" (click)="toggleShowInfoLayerActive()"></div>
+    </div> -->
+
+<div class="map-container">
+  <div class="map-frame">
+    <div id="map" leaflet [leafletOptions]="options" [leafletLayersControl]="layersControl"
+      [leafletLayersControlOptions]="layersControlOptions" [leafletLayers]="layers"
+      (leafletMapReady)="onMapReady($event)" (leafletMapZoomEnd)="onMapZoomEnd($event)" 
+      (leafletMapMoveEnd)="onMapMoveEnd($event)"
+      >
+      
+    
+    </div>
+
+  </div>
+</div>
+
+<leaflet-fullscreen-control [map]="map" [options]="fullscreenOptions" ></leaflet-fullscreen-control>
+
+
+<!-- <app-busqueda
+  [position]='"topleft"'
+  [map]='map'
+></app-busqueda>
+
+  <app-current-user
+  [position]='"topright"'
+  [map]='map'
+></app-current-user> -->
