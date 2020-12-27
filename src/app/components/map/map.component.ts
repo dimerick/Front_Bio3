@@ -61,10 +61,10 @@ export class MapComponent implements OnInit, OnDestroy {
   public initialZoom: number;
   public lastZoom: number;
   public scaleDiff: number;
-  public initTop: number;
-  public initLeft: number;
-  public actTop: number;
-  public actLeft: number;
+  public initTop: number = 0;
+  public initLeft: number = 0;
+  public actTop: number = 0;
+  public actLeft: number = 0;
   public boundsMap: LatLngBounds;
   public Custom = Control.extend({
 
@@ -110,7 +110,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.options = {
       layers: [tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
-        maxZoom: 19,
+        maxZoom: 15,
         detectRetina: true,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       })],

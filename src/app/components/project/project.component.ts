@@ -590,6 +590,7 @@ this.inputProjectSearch = search.term;
 
       this.projectForm.get('project').setValue(this.idNewProject);
       this.projectSelected = project;
+      this.mainUniversitySelected = true;
 
       this.idNewProject = this.idNewProject -1;
 

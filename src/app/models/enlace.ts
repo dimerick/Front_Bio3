@@ -20,5 +20,6 @@ export interface Enlace{
     description: string, 
     createdAt: string,
     initPoint: LatLng,
-    endPoint: LatLng 
+    endPoint: LatLng, 
+    type: string 
 }

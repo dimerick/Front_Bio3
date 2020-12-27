@@ -17,12 +17,11 @@
 
   
 
-  <div id="data-info-map">
+  <div id="data-info-map" *ngIf="initTop">
     initTop: {{initTop}}<br>
     initLeft: {{initLeft}}<br>
     actTop: {{actTop}}<br>
     actLeft: {{actLeft}}<br>
-    initialZoom: {{initialZoom}}<br>
     initialZoom: {{initialZoom}}<br>
     zoom act: {{lastZoom}}<br>
     zoom scaleDiff: {{scaleDiff}}<br>

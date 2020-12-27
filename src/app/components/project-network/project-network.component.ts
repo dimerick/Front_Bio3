@@ -36,6 +36,8 @@ export class ProjectNetworkComponent implements OnInit {
   public g: any;
   public lockUpdateEnlances = false;
   public initZoom: number;
+  public colorU = '#03a7e5';
+  public colorC = '#63bb8c';
 
   public canvasIconClean = divIcon({
     iconSize: [0, 0],
@@ -119,6 +121,7 @@ export class ProjectNetworkComponent implements OnInit {
             createdAt: e.created_at,
             initPoint: latLng([n.lat, n.long]),
             endPoint: latLng([n.lat_assoc, n.long_assoc]),
+            type: 'U',
 
           };
 
@@ -221,8 +224,20 @@ export class ProjectNetworkComponent implements OnInit {
             weight: 5,
             opacity: 0.5
           });//.bindPopup(e.name);
-          this.layers.push(poly);
+          // this.layers.push(poly);
 
+          let enl: Enlace = {
+            id: e.id,
+            name: e.name,
+            description: e.description,
+            createdAt: e.created_at,
+            initPoint: latLng([n.lat, n.long]),
+            endPoint: latLng([n.lat_assoc, n.long_assoc]),
+            type: 'C',
+
+          };
+
+          this.enlaces.push(enl);
 
           poly.addEventListener('click', (layer) => {
             console.log(e);
@@ -351,6 +366,7 @@ export class ProjectNetworkComponent implements OnInit {
   }
 
   mapZoomEnd(e: ZoomAnimEvent) {
+    this.updateLinesNetwork();
     // let map = this.mapComponent.map;
     // let scale = map.getZoomScale(e.zoom, this.lastZoom);
     // let offSet = map._latLngToNewLayerPoint(this.lastTopLeftlatLng, e.zoom, e.center);
@@ -389,6 +405,7 @@ export class ProjectNetworkComponent implements OnInit {
 
     svg.setAttribute('width', mapSize.x.toString());
     svg.setAttribute('height', mapSize.y.toString());
+    svg.setAttribute('id', "canvas-project-network");
 
     svg.setAttribute('viewBox', `0 0 ${mapSize.x.toString()} ${mapSize.y.toString()}`);
 
@@ -435,8 +452,14 @@ export class ProjectNetworkComponent implements OnInit {
           }
           let xmed = minx + (width / 2);
           let ymed = maxy;
+
+          let color = this.colorU;
+          if(enl.type == 'C'){
+            color = this.colorC;
+          }
           
-          paths += `<path d='M${point1.x},${point1.y} Q${xmed},${ymed} ${point2.x},${point2.y}' fill='none' stroke="red" stroke-width="5"/>`;
+          // paths += `<path d='M${point1.x},${point1.y} Q${xmed},${ymed} ${point2.x},${point2.y}' fill='none' stroke="red" stroke-width="5" class="line-network"/>`;
+          paths += this.arcLines(point1.x, point1.y, point2.x, point2.y, 1, 1000, false, color);
 
     });
     
@@ -448,25 +471,6 @@ export class ProjectNetworkComponent implements OnInit {
     this.svg = svg;
     this.g = g;
    
-  }
-
-  updatePositionSVG(){
-    let map = this.mapComponent.map;
-    let bounds = map.getBounds();
-    let size = map.getSize();
-    let topLeftLatLng = new LatLng(bounds.getNorth(), bounds.getWest());
-    let topLeftLayerPoint  = map.latLngToLayerPoint(topLeftLatLng);
-    let lastLeftLayerPoint = map.latLngToLayerPoint(this.lastTopLeftlatLng);
-    let delta = lastLeftLayerPoint.subtract(topLeftLayerPoint);
-    this.shift = this.shift.add(delta);
-
-    DomUtil.setPosition(this.svg, topLeftLayerPoint);
-
-    
-    // this.g.setAttribute("transform", "translate(" + this.shift.x + "," + this.shift.y + ")");
-    this.updatePaths();
-    this.lastTopLeftlatLng = topLeftLatLng;
-
   }
 
   updateSVG(){
@@ -510,78 +514,49 @@ export class ProjectNetworkComponent implements OnInit {
 
   }
   
-  updateScaleSVG(){
+  updateLinesNetwork(){
     let map = this.mapComponent.map;
-    let bounds = map.getBounds();
-    let size = map.getSize();
-    let topLeftLatLng = new LatLng(bounds.getNorth(), bounds.getWest());
-    let topLeftLayerPoint  = map.latLngToLayerPoint(topLeftLatLng);
-    let lastLeftLayerPoint = map.latLngToLayerPoint(this.lastTopLeftlatLng);
-    let delta = lastLeftLayerPoint.subtract(topLeftLayerPoint);
     let zoom = map.getZoom();
-    let scaleDelta = map.getZoomScale(zoom, this.lastZoom);
-    let scaleDiff = this.getScaleDiff(zoom);
-
-    let difZoom = this.initZoom - zoom;
-    let scaleZoomNew = Math.pow(2, Math.abs(difZoom));
-
-    this.mapComponent.setScaleDiff(scaleDiff);
-
-    // this.shift = this.shift.multiplyBy(scaleDelta).add(delta);
-    let shift = this.shift.subtract(delta);
-
-    this.svg.setAttribute('width', size.x);
-    this.svg.setAttribute('height', size.y);
-
+    let delta = this.initZoom - zoom;
+    let propZoom = Math.pow(2, delta)*0.5;
+    let lines = document.getElementsByClassName("line-network");
     
+    for(let i=0;i < lines.length; i++){
+lines[i].setAttribute("stroke-width", `${propZoom.toString()}%`);
+    }
 
-    // DomUtil.setPosition(this.svg, topLeftLayerPoint);
-
-    this.svg.setAttribute('viewBox', `${shift.x} ${shift.y} ${shift.x*scaleZoomNew} ${shift.y*scaleZoomNew}`);
-  }
-  updatePaths(){
-    let paths = ``;
-    
-    this.enlaces.forEach(enl => {
-      let point1 = this.mapComponent.map.latLngToLayerPoint(enl.initPoint);
-          let point2 = this.mapComponent.map.latLngToLayerPoint(enl.endPoint);
-
-          let width = Math.abs(point2.x - (point1.x));
-          let height = Math.abs(point2.y - (point1.y));
-
-          
-          let minx = point1.x;
-          let maxx = point2.x;
-          let despx = 0;
-          if (point2.x < minx) {
-            minx = point2.x;
-            maxx = point1.x;
-            despx = width;
-          }
-
-          let miny = point1.y;
-          let maxy = point2.y;
-          let despy = 0;
-          if (point2.y < miny) {
-            miny = point2.y;
-            maxy = point1.y;
-            despy = height;
-          }
-          let xmed = minx + (width / 2);
-          let ymed = maxy;
-          
-          paths += `<path d='M${point1.x},${point1.y} Q${xmed},${ymed} ${point2.x},${point2.y}' fill='none' stroke="red" stroke-width="5"/>`;
-
-    });
-    
-    this.g.innerHTML = paths;
-    // this.svg.innerHTML = paths;
   }
 
   getScaleDiff(zoom: number) {
     let zoomDiff = this.groundZoom - zoom;
     let scale = (zoomDiff < 0 ? Math.pow(2, Math.abs(zoomDiff)) : 1 / (Math.pow(2, zoomDiff)));
     return scale;
+}
+
+arcLines(x1:number, y1: number, x2: number, y2: number, n: number, k:number, lineMiddle: boolean, color: string): string {
+  let cx = (x1+x2)/2;
+  let cy = (y1+y2)/2;
+  let dx = (x2-x1)/2;
+  let dy = (y2-y1)/2;
+  let items = '';
+  for (let i=0; i<n; i++) {
+    if ((i==(n-1)/2) && lineMiddle) {
+      items += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" fill='none' stroke="${color}" stroke-width="5" class="line-network"/>`;
+      
+    }
+    else {
+      
+      let dd = Math.sqrt(dx*dx+dy*dy);
+      // let ex = cx + dy/dd * k * (i-(n-1)/2);
+      // let ey = cy - dx/dd * k * (i-(n-1)/2);
+      let distance = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2))
+      let ex = cx + dy/dd * (distance/4);
+      let ey = cy - dx/dd * (distance/4);
+      items += `<path d='M${x1},${y1} Q${ex},${ey} ${x2},${y2}' fill='none' stroke="${color}" stroke-width="5" class="line-network"/>`;
+    }
+  }
+
+  return items;
 }
 
 }
