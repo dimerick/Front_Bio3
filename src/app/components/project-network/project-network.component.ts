@@ -124,7 +124,7 @@ export class ProjectNetworkComponent implements OnInit {
               endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
               type: arista.type, 
               priority: arista.rn, 
-              nameEntities: uni.name + '<=>' + arista.assoc_name
+              nameEntities: uni.name + ' <=> ' + arista.assoc_name
   
             };
 
@@ -317,6 +317,8 @@ export class ProjectNetworkComponent implements OnInit {
     // svg.innerHTML = paths;
 
     pane.appendChild(svg);
+
+    this.onClickLineNetwork();
     
     
    
@@ -367,7 +369,7 @@ export class ProjectNetworkComponent implements OnInit {
     let map = this.mapComponent.map;
     let zoom = map.getZoom();
     let delta = this.initZoom - zoom;
-    let propZoom = Math.pow(2, delta)*0.1;
+    let propZoom = Math.pow(2, delta)*0.25;
     let lines = document.getElementsByClassName("line-network");
     
     for(let i=0;i < lines.length; i++){
@@ -415,11 +417,58 @@ arcLines(enl: Enlace): string {
       let distance = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2))
       let ex = (cx + dy/dd * (distance/4) * (enl.priority * 0.5)) * sentido;
       let ey = (cy - dx/dd * (distance/4) * (enl.priority * 0.5));
-      items += `<path d='M${x1},${y1} Q${ex},${ey} ${x2},${y2}' fill='none' stroke="${color}" stroke-width="5" class="line-network"/>`;
+      items += `<path d='M${x1},${y1} Q${ex},${ey} ${x2},${y2}' fill='none' stroke="${color}" stroke-width="5" style="cursor:pointer;pointer-events: initial;"class="line-network" id="enl-${enl.id}-${enl.priority}"/>`;
     }
   }
 
   return items;
+}
+
+onClickLineNetwork(){
+
+  let lines = document.getElementsByClassName("line-network");
+  for(let i=0;i < lines.length; i++){
+    lines[i].addEventListener('click', ()=>{
+      let id = lines[i].getAttribute("id");
+      let itemsId = id.split("-");
+      let idEnl = Number(itemsId[1]);
+      let priority = Number(itemsId[2]);
+      this.showInfoLineNetwork(idEnl, priority);
+    });
+        }
+}
+
+showInfoLineNetwork(idEnl: number, priority: number){
+this.enlaces.forEach(enl => {
+if(enl.id == idEnl && enl.priority == priority){
+
+  this.mapComponent.showInfoLayer(`
+  <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                            
+                            <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
+                            
+                                <h5>${enl.name}</h5><br>
+                                ${enl.nameEntities}                                         
+                                
+                                <p>
+                                ${enl.description.replace(/\n/g, "<br />")}
+                                </p>
+
+                                <div class="grid-image"> 
+                                
+                                
+                                </div>
+
+                            </div>
+                            <!--end feature-->
+                        </div>                               
+  
+  `, latLng(enl.initPoint.lat, enl.initPoint.lng));
+
+}
+});
 }
 
 }
