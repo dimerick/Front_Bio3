@@ -21,5 +21,7 @@ export interface Enlace{
     createdAt: string,
     initPoint: LatLng,
     endPoint: LatLng, 
-    type: string 
+    type: string,
+    priority: number,
+    nameEntities: string
 }

@@ -142,7 +142,7 @@ export class ProjectService{
 
     getProjectNetwork():Observable<any>{
         return this._http.get(
-            `${this.url}project-network`
+            `${this.url}project-network-expanded`
         ).pipe(
             map( resp => {
                 return resp;

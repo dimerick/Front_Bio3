@@ -16,6 +16,9 @@
             color: #fff;
             position: absolute;
             left: -8px;
+            -webkit-box-shadow: -8px 0px 17px -9px rgba(0,0,0,0.75);
+-moz-box-shadow: -8px 0px 17px -9px rgba(0,0,0,0.75);
+box-shadow: -8px 0px 17px -9px rgba(0,0,0,0.75);
 }
 
 

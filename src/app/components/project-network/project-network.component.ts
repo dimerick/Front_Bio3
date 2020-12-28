@@ -3,6 +3,7 @@ import { circle, Icon, LatLng, Layer, marker, Marker, point, Point, Polyline, po
 import { Enlace } from 'src/app/models/enlace';
 import { LayerMap } from 'src/app/models/LayerMap';
 import { ProjectService } from 'src/app/services/project.service';
+import { UniversityService } from 'src/app/services/university.service';
 import { MapComponent } from '../map/map.component';
 
 
@@ -92,6 +93,7 @@ export class ProjectNetworkComponent implements OnInit {
 
   mapReady(e: boolean) {
     this.getProjectNetwork();
+    this.getNodes();
   }
 
   getProjects() {
@@ -106,259 +108,131 @@ export class ProjectNetworkComponent implements OnInit {
 
   getProjectNetwork() {
     this.projectService.getProjectNetwork().subscribe(resp => {
-
-
-
-      console.log(resp);
-      resp.forEach(e => {
-        console.log(e);
-        e.universities_network.forEach(n => {
-
-          let enl: Enlace = {
-            id: e.id,
-            name: e.name,
-            description: e.description,
-            createdAt: e.created_at,
-            initPoint: latLng([n.lat, n.long]),
-            endPoint: latLng([n.lat_assoc, n.long_assoc]),
-            type: 'U',
-
-          };
-
-          this.enlaces.push(enl);
-
-          let poly = new Polyline([[n.lat, n.long], [n.lat_assoc, n.long_assoc]], {
-            color: '#03a7e5',
-            weight: 5,
-            opacity: 0.5
-          });//.bindPopup(e.name);
-
-          // this.markCanvas = marker(this.mapComponent.map.layerPointToLatLng([0, 0]))
-          // .addTo(this.mapComponent.map);
-
-          // this.layers.push(poly);
-
-
-
-
-          
-
-          
-
-
-          // let svgrect = `<svg xmlns='http://www.w3.org/2000/svg' width='${mapSize.x}' height='${mapSize.y}' viewBox="0 0 ${width} ${height}"><path d='M${point1.x},${point1.y} Q${xmed},${ymed} ${point2.x},${point2.y}' fill='none' stroke="red" stroke-width="5"/></svg>`;
-
-          
-          
-
-          let columns_images = `<div class="column">`;
-          console.log(e.images.length);
-          e.images.slice(0, Math.round(e.images.length / 2)).forEach(img => {
-            columns_images += `<img src="${img.url}">`;
-
-
-          });
-          columns_images += `</div><div class="column">`;
-          e.images.slice(Math.round(e.images.length / 2), e.images.length).forEach(img => {
-            columns_images += `<img src="${img.url}">`;
-
-          });
-          columns_images += `</div>`;
-
-          console.log(columns_images);
-
-
-          let slider_images = `<div class="slider" data-arrows="true">
-          <ul class="slides">`;
-          console.log(e.images.length);
-          e.images.slice(0, Math.round(e.images.length / 2)).forEach(img => {
-            slider_images += `<li><img alt="Image project ${e.name}"src="${img.url}"></li>`;
-
-
-          });
-          slider_images += `</ul>
-          </div>`;
-
-          e.columns_images = columns_images;
-          e.slider_images = slider_images;
-
-          poly.addEventListener('click', (layer) => {
-            console.log(e);
-
-
-
-            this.mapComponent.showInfoLayer(`
-            <div class="row">
-                                  <div class="col-md-12">
-                                      <div>
-                                      
-                                      <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
-                                      
-                                          <h5>${e.name}</h5>
-                                                                                   
-                                          
-                                          <p>
-                                          ${e.description.replace(/\n/g, "<br />")}
-                                          </p>
-
-                                          <div class="grid-image"> 
-                                          
-                                          ${e.columns_images}
-                                          </div>
-
-                                      </div>
-                                      <!--end feature-->
-                                  </div>                               
-            
-            `, latLng(e.lat, e.long));
-          }, e);
-
-        });
-
-
-
-        e.communities_network.forEach(n => {
-
-          let poly = new Polyline([[n.lat, n.long], [n.lat_assoc, n.long_assoc]], {
-            color: '#63bb8c',
-            weight: 5,
-            opacity: 0.5
-          });//.bindPopup(e.name);
-          // this.layers.push(poly);
-
-          let enl: Enlace = {
-            id: e.id,
-            name: e.name,
-            description: e.description,
-            createdAt: e.created_at,
-            initPoint: latLng([n.lat, n.long]),
-            endPoint: latLng([n.lat_assoc, n.long_assoc]),
-            type: 'C',
-
-          };
-
-          this.enlaces.push(enl);
-
-          poly.addEventListener('click', (layer) => {
-            console.log(e);
-            this.mapComponent.showInfoLayer(`
-            <div class="row">
-                                  <div class="col-md-12">
-                                      <div class="">
-                                      <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
-                                          <h5>${e.name}</h5>
-                                          
-                                          <p>
-                                          ${e.description.replace(/\n/g, "<br />")}
-                                          </p>
-                                      </div>
-                                      <!--end feature-->
-                                  </div>                               
-            
-            `, latLng(e.lat, e.long));
-          }, e);
-
-        });
-
+    
+      resp.forEach(uni => {
         
+        uni.projects.forEach(project => {    
 
-        this.projectService.getNodes().subscribe(resp => {
-          console.log(resp);
-          resp.universities.forEach(e => {
-            console.log(e);
+          project.aristas.forEach(arista => {    
 
-            let myIcon = new DivIcon({
-              className: 'div-icon color1',
-              iconSize: [e.points, e.points],
-              iconAnchor: [e.points / 2, e.points / 2]
+            let enl: Enlace = {
+              id: project.id,
+              name: project.name,
+              description: project.description,
+              createdAt: project.created_at,
+              initPoint: latLng([uni.lat, uni.long]),
+              endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
+              type: arista.type, 
+              priority: arista.rn, 
+              nameEntities: uni.name + '<=>' + arista.assoc_name
+  
+            };
 
-            });
-
-            let myIconSelected = new DivIcon({
-              className: 'div-icon color3',
-              iconSize: [e.points, e.points],
-              iconAnchor: [e.points / 2, e.points / 2]
-
-            });
-
-            let mark = marker([e.lat, e.long], {
-              icon: myIcon,
-            });//.bindPopup(e.name);
-
-            let layerMap: LayerMap = {
-              id: e.id,
-              name: e.name,
-              layer: mark
-            }
-
-            console.log(mark);
-
-            this.layers.push(mark);
-
-
-
-            mark.addEventListener('click', (layer) => {
-              console.log(e);
-              this.mapComponent.showInfoLayer(`
-              <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="">
-                                        <i class="fa fa-university fa-2x" aria-hidden="true" title="University"></i>
-                                            <h5>${e.name}</h5>
-                                            
-                                        </div>
-                                        <!--end feature-->
-                                    </div>                               
-              
-              `, latLng(e.lat, e.long));
-            }, e);
+            this.enlaces.push(enl);
 
           });
 
-          resp.communities.forEach(e => {
-            console.log(e);
-
-            let myIcon = new DivIcon({
-              className: 'div-icon color2',
-              iconSize: [e.points, e.points],
-              iconAnchor: [e.points / 2, e.points / 2]
-
-            });
-
-            let mark = marker([e.lat, e.long], {
-              icon: myIcon
-            });//.bindPopup(`<span hidden>${e.id}</span>${e.name}`);
-
-            this.layers.push(mark);
-
-
-            mark.addEventListener('click', (layer) => {
-              console.log(e);
-              this.mapComponent.showInfoLayer(`
-              <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="">
-                                        
-                                        <i class="fa fa-users fa-2x" aria-hidden="true" title="Community"></i>
-                                            <h5>${e.name}</h5>
-                                            
-                                        </div>
-                                        <!--end feature-->
-                                    </div>                               
-              
-              `, latLng(e.lat, e.long));
-            }, e);
-
-          });
-
-        },
-          (err) => {
-            console.log(err);
-          });
+        });
 
       });
 
       this.drawEnlaces();
+    },
+      (err) => {
+        console.log(err);
+      });
+  }
+
+  getNodes(){
+    this.projectService.getNodes().subscribe(resp => {
+      console.log(resp);
+      resp.universities.forEach(e => {
+        console.log(e);
+
+        let myIcon = new DivIcon({
+          className: 'div-icon color1',
+          iconSize: [e.points, e.points],
+          iconAnchor: [e.points / 2, e.points / 2]
+
+        });
+
+        let myIconSelected = new DivIcon({
+          className: 'div-icon color3',
+          iconSize: [e.points, e.points],
+          iconAnchor: [e.points / 2, e.points / 2]
+
+        });
+
+        let mark = marker([e.lat, e.long], {
+          icon: myIcon,
+        });//.bindPopup(e.name);
+
+        let layerMap: LayerMap = {
+          id: e.id,
+          name: e.name,
+          layer: mark
+        }
+
+        console.log(mark);
+
+        this.layers.push(mark);
+
+
+
+        mark.addEventListener('click', (layer) => {
+          console.log(e);
+          this.mapComponent.showInfoLayer(`
+          <div class="row">
+                                <div class="col-md-12">
+                                    <div class="">
+                                    <i class="fa fa-university fa-2x" aria-hidden="true" title="University"></i>
+                                        <h5>${e.name}</h5>
+                                        
+                                    </div>
+                                    <!--end feature-->
+                                </div>                               
+          
+          `, latLng(e.lat, e.long));
+        }, e);
+
+      });
+
+      resp.communities.forEach(e => {
+        console.log(e);
+
+        let myIcon = new DivIcon({
+          className: 'div-icon color2',
+          iconSize: [e.points, e.points],
+          iconAnchor: [e.points / 2, e.points / 2]
+
+        });
+
+        let mark = marker([e.lat, e.long], {
+          icon: myIcon
+        });//.bindPopup(`<span hidden>${e.id}</span>${e.name}`);
+
+        this.layers.push(mark);
+
+
+        mark.addEventListener('click', (layer) => {
+          console.log(e);
+          this.mapComponent.showInfoLayer(`
+          <div class="row">
+                                <div class="col-md-12">
+                                    <div class="">
+                                    
+                                    <i class="fa fa-users fa-2x" aria-hidden="true" title="Community"></i>
+                                        <h5>${e.name}</h5>
+                                        
+                                    </div>
+                                    <!--end feature-->
+                                </div>                               
+          
+          `, latLng(e.lat, e.long));
+        }, e);
+
+      });
+
     },
       (err) => {
         console.log(err);
@@ -410,6 +284,9 @@ export class ProjectNetworkComponent implements OnInit {
     svg.setAttribute('viewBox', `0 0 ${mapSize.x.toString()} ${mapSize.y.toString()}`);
 
     svg.appendChild(g);
+
+    this.svg = svg;
+    this.g = g;
     
     this.groundZoom = map.getZoom();
     
@@ -426,40 +303,13 @@ export class ProjectNetworkComponent implements OnInit {
     let paths = ``;
     
     this.enlaces.forEach(enl => {
-      let point1 = this.mapComponent.map.latLngToLayerPoint(enl.initPoint);
-          let point2 = this.mapComponent.map.latLngToLayerPoint(enl.endPoint);
+      
 
-          let width = Math.abs(point2.x - (point1.x));
-          let height = Math.abs(point2.y - (point1.y));
 
           
-          let minx = point1.x;
-          let maxx = point2.x;
-          let despx = 0;
-          if (point2.x < minx) {
-            minx = point2.x;
-            maxx = point1.x;
-            despx = width;
-          }
-
-          let miny = point1.y;
-          let maxy = point2.y;
-          let despy = 0;
-          if (point2.y < miny) {
-            miny = point2.y;
-            maxy = point1.y;
-            despy = height;
-          }
-          let xmed = minx + (width / 2);
-          let ymed = maxy;
-
-          let color = this.colorU;
-          if(enl.type == 'C'){
-            color = this.colorC;
-          }
           
           // paths += `<path d='M${point1.x},${point1.y} Q${xmed},${ymed} ${point2.x},${point2.y}' fill='none' stroke="red" stroke-width="5" class="line-network"/>`;
-          paths += this.arcLines(point1.x, point1.y, point2.x, point2.y, 1, 1000, false, color);
+          paths += this.arcLines(enl);
 
     });
     
@@ -468,8 +318,7 @@ export class ProjectNetworkComponent implements OnInit {
 
     pane.appendChild(svg);
     
-    this.svg = svg;
-    this.g = g;
+    
    
   }
 
@@ -518,7 +367,7 @@ export class ProjectNetworkComponent implements OnInit {
     let map = this.mapComponent.map;
     let zoom = map.getZoom();
     let delta = this.initZoom - zoom;
-    let propZoom = Math.pow(2, delta)*0.5;
+    let propZoom = Math.pow(2, delta)*0.1;
     let lines = document.getElementsByClassName("line-network");
     
     for(let i=0;i < lines.length; i++){
@@ -533,25 +382,39 @@ lines[i].setAttribute("stroke-width", `${propZoom.toString()}%`);
     return scale;
 }
 
-arcLines(x1:number, y1: number, x2: number, y2: number, n: number, k:number, lineMiddle: boolean, color: string): string {
+arcLines(enl: Enlace): string {
+  let point1 = this.mapComponent.map.latLngToLayerPoint(enl.initPoint);
+  let point2 = this.mapComponent.map.latLngToLayerPoint(enl.endPoint);
+  let x1 = point1.x;
+  let y1 = point1.y;
+  let x2 = point2.x;
+  let y2 = point2.y;
   let cx = (x1+x2)/2;
   let cy = (y1+y2)/2;
   let dx = (x2-x1)/2;
   let dy = (y2-y1)/2;
   let items = '';
+  let n = 1;
+  let color = this.colorU;
+  if(enl.type == 'C'){
+    color = this.colorC;
+  } 
   for (let i=0; i<n; i++) {
-    if ((i==(n-1)/2) && lineMiddle) {
+    if ((i==(n-1)/2) && false) {
       items += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" fill='none' stroke="${color}" stroke-width="5" class="line-network"/>`;
       
     }
     else {
-      
+      let sentido = 1;
+      if(enl.type == 'C'){
+        sentido = -1;
+      }
       let dd = Math.sqrt(dx*dx+dy*dy);
       // let ex = cx + dy/dd * k * (i-(n-1)/2);
       // let ey = cy - dx/dd * k * (i-(n-1)/2);
       let distance = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2))
-      let ex = cx + dy/dd * (distance/4);
-      let ey = cy - dx/dd * (distance/4);
+      let ex = (cx + dy/dd * (distance/4) * (enl.priority * 0.5)) * sentido;
+      let ey = (cy - dx/dd * (distance/4) * (enl.priority * 0.5));
       items += `<path d='M${x1},${y1} Q${ex},${ey} ${x2},${y2}' fill='none' stroke="${color}" stroke-width="5" class="line-network"/>`;
     }
   }
