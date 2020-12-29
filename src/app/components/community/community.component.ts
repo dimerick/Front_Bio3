@@ -94,8 +94,12 @@ export class CommunityComponent implements OnInit {
             icon: 'success',
             title: 'Registro exitoso'
 
-          });
-          this.emitCommunityRegistered();
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.emitCommunityRegistered();
+            }
+          });;
+          
         },
         (err) => {
           Swal.fire({

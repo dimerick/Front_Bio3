@@ -51,8 +51,8 @@ export class ProjectComponent implements OnInit {
   public loadImagesActive = true;
   public mainUniversitySelected = false;
   public inputProjectSearch = "";
-  
-  
+
+
 
   constructor(
     private universityService: UniversityService,
@@ -171,13 +171,13 @@ export class ProjectComponent implements OnInit {
 
           this.addEntitiesProject(resp, entities).subscribe(resp => {
 
-            if(this.loadFilesComponent.files.length > 0){
+            if (this.loadFilesComponent.files.length > 0) {
 
               Swal.fire({
                 allowOutsideClick: false,
                 icon: 'info',
                 text: 'Cargando imagenes...',
-    
+
               });
               Swal.showLoading();
               this.loadImages(this.projectRegistered).subscribe(resp => {
@@ -185,33 +185,33 @@ export class ProjectComponent implements OnInit {
                 Swal.fire({
                   icon: 'success',
                   title: 'Proyecto registrado exitosamente'
-    
+
                 });
-    
+
                 this.resetForm();
 
-              }, 
-              (err) => {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error cargando las imagenes del proyecto',
-                  text: err
+              },
+                (err) => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error cargando las imagenes del proyecto',
+                    text: err
+                  });
                 });
-              });
 
-            }else{
+            } else {
 
               Swal.fire({
                 icon: 'success',
                 title: 'Proyecto registrado exitosamente'
-  
+
               });
-  
+
               this.resetForm();
 
             }
 
-            
+
 
           },
             (err) => {
@@ -302,7 +302,7 @@ export class ProjectComponent implements OnInit {
     this.universityService.getUniversities().subscribe(
       resp => {
         this.universities = resp;
-        
+
       },
       (err) => {
         console.log(err);
@@ -332,14 +332,10 @@ export class ProjectComponent implements OnInit {
 
       let mainId = this.projectForm.value.university;
 
-      this.universityService.getUniversityAssociated(mainId).subscribe(resp => {
-        this.universitiesAssociated = resp;
-      }, 
-      (err) => {
-console.log(err);
-      });
+      this.updateUniversitiesAssociated(mainId);
 
-    }else{
+
+    } else {
       this.mainUniversitySelected = false;
     }
 
@@ -373,7 +369,7 @@ console.log(err);
     console.log(e);
     this.projectSelected = e;
     console.log(this.projectSelected);
-    
+
 
 
     if (this.projectForm.value.project > 0) {
@@ -384,31 +380,28 @@ console.log(err);
       this.projectForm.controls.university.setValue(this.projectSelected.main_university);
       this.mainUniversityDisabled = true;
 
-      
-      
+
+
       this.universityService.getUniversityById(this.projectSelected.main_university)
         .subscribe(resp => {
           console.log("main_university", resp);
           this.lon = resp.location.coordinates[0];
           this.lat = resp.location.coordinates[1];
           this.mapComponent.updateMark(new LatLng(this.lat, this.lon));
-          
+
         },
 
           (err) => {
             console.log(err);
           });
 
-          this.mainUniversitySelected = true;
+      this.mainUniversitySelected = true;
 
-          let mainId = this.projectSelected.main_university;
+      let mainId = this.projectSelected.main_university;
 
-      this.universityService.getUniversityAssociated(mainId).subscribe(resp => {
-        this.universitiesAssociated = resp;
-      }, 
-      (err) => {
-console.log(err);
-      });
+      this.updateUniversitiesAssociated(mainId);
+
+
 
     } else {
       console.log("El proyecto es nuevo");
@@ -423,40 +416,58 @@ console.log(err);
   }
 
   toggleAddUniversity() {
-    console.log("Añadir University");
+    
     document.body.classList.toggle("modal-open");
     this.modalAddUniversityActive = !this.modalAddUniversityActive;
   }
 
   toggleAddCommunity() {
-    console.log("Añadir Comunnity");
+    
     document.body.classList.toggle("modal-open");
     this.modalAddCommunityActive = !this.modalAddCommunityActive;
   }
 
 
   eventUniversityRegistered(e: University) {
+    
     console.log(e);
     this.universityRegistered = e;
     this.getUniversities();
-    this.projectForm.get('university').setValue(e.id);
+    let mainId = this.projectForm.value.university;
+    this.updateUniversitiesAssociated(mainId);
+    if (this.projectForm.value.university == null) {
+      this.projectForm.get('university').setValue(e.id);
+      this.mainUniversitySelected = true;
+    } else if (this.projectForm.value.universitiesAssociated == null) {
+      this.projectForm.get('universitiesAssociated').setValue([e.id]);
+    } else {
+      let arr = this.projectForm.value.universitiesAssociated;
+      arr.push(e.id);
+      this.projectForm.get('universitiesAssociated').setValue(arr);
+    }
+
+    // this.projectForm.get('university').setValue(e.id);
     this.lat = e.location.coordinates[1];
     this.lon = e.location.coordinates[0];
     this.mapComponent.updateMark(new LatLng(this.lat, this.lon));
+
+    this.toggleAddUniversity();
   }
 
   eventCommunityRegistered(e: Community) {
     console.log(e);
     this.communityRegistered = e;
     this.getCommunities();
-    let vals: number[] = this.projectForm.get('communitiesAssociated').value;
-    // this.projectForm.get('communitiesAssociated').value(e.id);
-    vals.push(e.id);
-    console.log(vals);
-    this.projectForm.get('communitiesAssociated').reset();
-    this.projectForm.get('communitiesAssociated').setValue(vals);
-    this.lat = e.location.coordinates[1];
-    this.lon = e.location.coordinates[0];
+
+    if (this.projectForm.value.communitiesAssociated == null) {
+      this.projectForm.get('communitiesAssociated').setValue([e.id]);
+    } else {
+      let arr = this.projectForm.value.communitiesAssociated;
+      arr.push(e.id);
+      this.projectForm.get('communitiesAssociated').setValue(arr);
+    }
+
+    this.toggleAddCommunity();
   }
 
   addProject = (name: string) => {
@@ -504,8 +515,8 @@ console.log(err);
     let numLoaded = 0;
     files.forEach(f => {
       const formData = new FormData();
-      
-      
+
+
       formData.append('image', f);
       formData.append('project', project.id.toString());
 
@@ -567,13 +578,13 @@ console.log(err);
 
   }
 
-  typingSearchProject(search){
-console.log(search);
-this.inputProjectSearch = search.term;
+  typingSearchProject(search) {
+    console.log(search);
+    this.inputProjectSearch = search.term;
   }
-  
-  closeProject(){
-    if(this.inputProjectSearch != ""){
+
+  closeProject() {
+    if (this.inputProjectSearch != "") {
 
       let project: Project = {
         id: this.idNewProject,
@@ -581,28 +592,36 @@ this.inputProjectSearch = search.term;
         description: null,
         created_by: null,
         created_at: null,
-        main_university: null, 
+        main_university: null,
         name_uni: this.inputProjectSearch
-  
+
       };
-  
+
       this.projects = [...this.projects, project];
 
       this.projectForm.get('project').setValue(this.idNewProject);
       this.projectSelected = project;
       this.mainUniversitySelected = true;
 
-      this.idNewProject = this.idNewProject -1;
+      this.idNewProject = this.idNewProject - 1;
 
       this.inputProjectSearch = "";
-      
+
     }
 
-    
 
-      }
 
-  
+  }
+
+  updateUniversitiesAssociated(mainId: number) {
+    this.universityService.getUniversityAssociated(mainId).subscribe(resp => {
+      this.universitiesAssociated = resp;
+    },
+      (err) => {
+        console.log(err);
+      });
+  }
+
 
 
 }

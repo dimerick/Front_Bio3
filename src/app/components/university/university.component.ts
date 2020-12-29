@@ -97,8 +97,12 @@ export class UniversityComponent implements OnInit {
             icon: 'success',
             title: 'Registro exitoso'
 
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.emitUniversityRegistered();
+            }
           });
-          this.emitUniversityRegistered();
+          
         },
         (err) => {
           Swal.fire({
