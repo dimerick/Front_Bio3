@@ -144,8 +144,9 @@
                             <p *ngIf="projectForm.get('universitiesAssociated').invalid && projectForm.get('communitiesAssociated').invalid"
                             class="color--error">Debes
                             ingresar al menos una universidad o comunidad asociada al proyecto</p>
-                            <button type="submit" class="btn btn--primary" [disabled]="projectForm.invalid">Create
+                            <button type="submit" class="btn btn--primary" >Create
                                 Project</button>
+                                <!-- [disabled]="projectForm.invalid" -->
                         </div>
     
                     </div>

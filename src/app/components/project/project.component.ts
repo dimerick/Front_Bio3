@@ -121,6 +121,20 @@ export class ProjectComponent implements OnInit {
 
   onSubmit() {
 
+    if(this.projectForm.invalid){
+
+      return Object.values( this.projectForm.controls ).forEach( control => {
+        
+        if ( control instanceof FormGroup ) {
+          Object.values( control.controls ).forEach( control => control.markAsTouched() );
+        } else {
+          control.markAsTouched();
+        }
+        
+        
+      });
+
+    }
 
     let project: Project = {
       id: null,
@@ -222,6 +236,45 @@ export class ProjectComponent implements OnInit {
               });
 
             });
+
+        }else{
+
+          if (this.loadFilesComponent.files.length > 0) {
+            Swal.fire({
+              allowOutsideClick: false,
+              icon: 'info',
+              text: 'Cargando imagenes...',
+
+            });
+            Swal.showLoading();
+            this.loadImages(this.projectRegistered).subscribe(resp => {
+
+              Swal.fire({
+                icon: 'success',
+                title: 'Proyecto registrado exitosamente'
+
+              });
+
+              this.resetForm();
+
+            },
+              (err) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error cargando las imagenes del proyecto',
+                  text: err
+                });
+              });
+          }else{
+            Swal.fire({
+              icon: 'success',
+              title: 'Proyecto registrado exitosamente'
+
+            });
+
+            this.resetForm();
+
+          }
 
         }
 
@@ -547,6 +600,7 @@ export class ProjectComponent implements OnInit {
     this.projectService.createProject(project)
       .subscribe(
         (resp: Project) => {
+          console.log(resp);
           subscriber.next(resp);
           subscriber.complete();
         },
@@ -593,7 +647,9 @@ export class ProjectComponent implements OnInit {
         created_by: null,
         created_at: null,
         main_university: null,
-        name_uni: this.inputProjectSearch
+        name_uni: this.inputProjectSearch,
+        universities: [],
+        communities: []
 
       };
 
