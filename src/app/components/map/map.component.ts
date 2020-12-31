@@ -110,7 +110,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.options = {
       layers: [tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
-        maxZoom: 15,
+        maxZoom: 18,
         detectRetina: true,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       })],
