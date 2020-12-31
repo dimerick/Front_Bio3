@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from 'src/app/models/project';
 import { ProjectService } from 'src/app/services/project.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-gallery',
@@ -22,11 +23,19 @@ export class GalleryComponent implements OnInit {
   }
 
   getProjects() {
+    Swal.fire({
+      allowOutsideClick: false,
+      icon: 'info',
+      text: 'Loading Gallery...',
 
+    });
+    Swal.showLoading();
     this.projectService.getProjectsExpanded().subscribe(resp => {
-
+      
       this.projects = resp;
-      console.log(this.projects);
+      Swal.close()
+
+      
     },
       (err) => {
 

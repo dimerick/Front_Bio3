@@ -205,10 +205,10 @@ export class MapComponent implements OnInit, OnDestroy {
     this.actTop = this.map.getBounds().getNorth();
     this.actLeft = this.map.getBounds().getWest();
     
-    this.mapLayer = new this.CustomInfoMap({
-      position: 'bottomleft'
-    });
-    this.map.addControl(this.mapLayer);
+    // this.mapLayer = new this.CustomInfoMap({
+    //   position: 'bottomleft'
+    // });
+    //this.map.addControl(this.mapLayer);
   }
 
   onMapZoomEnd(e: ZoomAnimEvent) {

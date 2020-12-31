@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
 })
 export class SigninComponent implements OnInit {
     signInForm = new FormGroup({
-    email : new FormControl('ericksaenz37@outlook.com', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')]), 
-    password : new FormControl('123456', Validators.required),
+    email : new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')]), 
+    password : new FormControl('', Validators.required),
   });
 
   // @Input() modalActive: boolean;
@@ -34,6 +34,22 @@ export class SigninComponent implements OnInit {
   }
 
   onSubmit(){
+
+    if(this.signInForm.invalid){
+
+      return Object.values( this.signInForm.controls ).forEach( control => {
+        
+        if ( control instanceof FormGroup ) {
+          Object.values( control.controls ).forEach( control => control.markAsTouched() );
+        } else {
+          control.markAsTouched();
+        }
+        
+        
+      });
+
+    }
+
     console.log(this.signInForm);
     let user: User = this.signInForm.value;
 

@@ -153,9 +153,34 @@ export class ProjectService{
         );
     }
 
+    getProjectNetworkById(idProject: number):Observable<any>{
+        return this._http.get(
+            `${this.url}project-network-expanded/${idProject}`
+        ).pipe(
+            map( resp => {
+                return resp;
+                
+            }
+            )
+            
+        );
+    }
+
     getNodes():Observable<any>{
         return this._http.get(
             `${this.url}nodes-network`
+        ).pipe(
+            map( (resp) => {
+                return resp;
+            }
+            )
+            
+        );
+    }
+
+    getNodesById(idProject: number):Observable<any>{
+        return this._http.get(
+            `${this.url}nodes-network/${idProject}`
         ).pipe(
             map( (resp) => {
                 return resp;

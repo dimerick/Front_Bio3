@@ -37,7 +37,7 @@
                 <div class="switchable__text">
                     <h2>Create a Bio3science account</h2>
                     <span>Already have an account?
-                        <a href="#">Sign In</a>
+                        <a href="/login">Sign In</a>
                     </span>
                     <hr class="short">
                     <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
@@ -163,7 +163,7 @@
                             </div>
     
                             <div class="col-12">
-                                <button type="submit" class="btn btn--primary" [disabled]="signUpForm.invalid">Create
+                                <button type="submit" class="btn btn--primary">Create
                                     Account</button>
                             </div>
                             <hr />

@@ -22,13 +22,13 @@
                                     <p *ngIf="signInForm.get('password').invalid && signInForm.get('password').touched" class="color--error text-left">Debes ingresar tu contraseña</p>
                                 </div>
                                 <div class="col-md-12">
-                                    <button class="btn btn--primary type--uppercase" type="submit" [disabled]="signInForm.invalid">Login</button>
+                                    <button class="btn btn--primary type--uppercase" type="submit">Login</button>
                                 </div>
                             </div>
                             <!--end of row-->
                         </form>
                         <span class="type--fine-print block">Dont have an account yet?
-                            <a [routerLink]="['/registro']">Create account</a>
+                            <a [routerLink]="['/signup']">Create account</a>
                         </span>
                         <span class="type--fine-print block">Forgot your username or password?
                             <a [routerLink]="['/recovery-password']">Recover account</a>

@@ -73,6 +73,22 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
+
+    if(this.signUpForm.invalid){
+
+      return Object.values( this.signUpForm.controls ).forEach( control => {
+        
+        if ( control instanceof FormGroup ) {
+          Object.values( control.controls ).forEach( control => control.markAsTouched() );
+        } else {
+          control.markAsTouched();
+        }
+        
+        
+      });
+
+    }
+
     console.log(this.signUpForm);
     let user: User = this.signUpForm.value;
 
@@ -208,17 +224,17 @@ export class SignupComponent implements OnInit {
   loadFormData() {
     this.signUpForm.setValue(
       {
-        name: 'Erick',
-        last_name: 'Saenz',
-        email: 'ericksaenz37@outlook.com',
-        degree: '1',
-        field_of_study: '7',
-        description: 'Esta es una descripción',
+        name: '',
+        last_name: '',
+        email: '',
+        degree: '',
+        field_of_study: '',
+        description: '',
         university: null,
-        websites: 'elatlas.org',
+        websites: '',
         //university: '', 
-        password: '123456',
-        confirmPassword: '123456', 
+        password: '',
+        confirmPassword: '', 
         agree: false
       }
     );

@@ -320,6 +320,7 @@ export class ProjectNetworkComponent implements OnInit {
 
     this.onClickLineNetwork();
     
+    map.setZoom(1);
     
    
   }
@@ -449,7 +450,9 @@ if(enl.id == idEnl && enl.priority == priority){
                             
                             <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
                             
-                                <h5>${enl.name}</h5><br>
+                                <a href="project/${enl.id}"><h5>${enl.name}</h5></a>
+                                <br>
+                                <br>
                                 ${enl.nameEntities}                                         
                                 
                                 <p>
