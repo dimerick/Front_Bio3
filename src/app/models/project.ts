@@ -29,6 +29,6 @@ export interface Project{
 
 export interface EntitiesProject{ 
     users?:User[], 
-    universities:University[], 
-    communities:Community[]  
+    universities?:University[], 
+    communities?:Community[]  
 }

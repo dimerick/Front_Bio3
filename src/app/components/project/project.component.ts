@@ -17,6 +17,7 @@ import { MapComponent } from '../map/map.component';
 import { LoadFilesComponent } from '../load-files/load-files.component';
 import { FileService } from 'src/app/services/file.service';
 import { Observable } from 'rxjs';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 
 
@@ -174,6 +175,20 @@ export class ProjectComponent implements OnInit {
             communities: communitiesAssociated
           };
 
+          if(universitiesAssociated != null && communitiesAssociated == null){
+            entities = {
+              universities: universitiesAssociated
+            };
+          }
+
+          if(communitiesAssociated != null && universitiesAssociated == null){
+            entities = {
+              communities: communitiesAssociated
+            };
+          }    
+
+          
+
           console.log(entities);
           Swal.fire({
             allowOutsideClick: false,
@@ -305,9 +320,11 @@ export class ProjectComponent implements OnInit {
       communitiesAssociated = [...communitiesAssociatedSet];
       console.log("communitiesAssociated", communitiesAssociated);
 
+
+
       let entities: EntitiesProject = {
-        universities: universitiesAssociated,
-        communities: communitiesAssociated
+        universities: universitiesAssociated.filter(x => x !== null),
+        communities: communitiesAssociated.filter(x => x !== null)
       };
 
       console.log(entities);
