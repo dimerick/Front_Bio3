@@ -370,7 +370,7 @@ export class ProjectNetworkComponent implements OnInit {
     let map = this.mapComponent.map;
     let zoom = map.getZoom();
     let delta = this.initZoom - zoom;
-    let propZoom = Math.pow(2, delta)*0.25;
+    let propZoom = Math.pow(2, delta)*0.7;
     let lines = document.getElementsByClassName("line-network");
     
     for(let i=0;i < lines.length; i++){
@@ -418,7 +418,7 @@ arcLines(enl: Enlace): string {
       let distance = Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2))
       let ex = (cx + dy/dd * (distance/4) * (enl.priority * 0.5)) * sentido;
       let ey = (cy - dx/dd * (distance/4) * (enl.priority * 0.5));
-      items += `<path d='M${x1},${y1} Q${ex},${ey} ${x2},${y2}' fill='none' stroke="${color}" stroke-width="5" style="cursor:pointer;pointer-events: initial;"class="line-network" id="enl-${enl.id}-${enl.priority}"/>`;
+      items += `<path d='M${x1},${y1} Q${ex},${ey} ${x2},${y2}' fill='none' stroke="${color}" stroke-width="7" style="cursor:pointer;pointer-events: initial;"class="line-network" id="enl-${enl.id}-${enl.priority}"/>`;
     }
   }
 
