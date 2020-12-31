@@ -43,6 +43,7 @@ export class ProjectDetailComponent implements OnInit {
   public initZoom: number;
   public colorU = '#03a7e5';
   public colorC = '#63bb8c';
+  public galleryActive = false;
 
   public canvasIconClean = divIcon({
     iconSize: [0, 0],
@@ -139,6 +140,12 @@ export class ProjectDetailComponent implements OnInit {
         }
 
         this.project = project;
+        if(project.images != null){
+          if(project.images.length > 0){
+this.galleryActive = true;
+          }
+
+        }
       }
 
 

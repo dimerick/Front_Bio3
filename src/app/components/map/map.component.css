@@ -97,3 +97,6 @@ overflow-x: hidden;
 #data-info-map{
   background-color: white;
 }
+.leaflet-control-fullscreen-button a{
+  background-position: bottom!important;
+}
