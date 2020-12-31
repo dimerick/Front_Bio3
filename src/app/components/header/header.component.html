@@ -9,7 +9,7 @@
                     </a>
                 </div>
                 <div class="col-9 col-md-10 text-right">
-                    <a href="#" class="hamburger-toggle" (click)="toggleMenuXsActive()">
+                    <a href="javascript:void(0)" class="hamburger-toggle" (click)="toggleMenuXsActive()">
                         <i class="icon icon--sm stack-interface stack-menu"></i>
                     </a>
                 </div>
@@ -19,7 +19,7 @@
         <!--end of container-->
     </div>
     <!--end bar-->
-    <nav id="menu1" class="bar bar--sm bar-1 hidden-xs bar--absolute bar--transparent">
+    <nav id="menu1" class="bar bar--sm bar-1 hidden-xs bar--absolute bar--transparent" [ngClass]="{'hidden-xs':menuXsActive}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-1 col-md-2 hidden-xs">
