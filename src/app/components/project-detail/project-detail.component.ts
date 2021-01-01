@@ -366,7 +366,7 @@ this.galleryActive = true;
 
     this.onClickLineNetwork();
 
-    map.setZoom(5);
+    map.setZoom(10);
 
   }
 
