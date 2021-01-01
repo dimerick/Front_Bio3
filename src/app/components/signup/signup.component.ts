@@ -364,6 +364,7 @@ export class SignupComponent implements OnInit {
     this.lat = e.location.coordinates[1];
     this.lon = e.location.coordinates[0];
     this.mapComponent.updateMark(new LatLng(this.lat, this.lon));
+    this.toggleAddUniversity();
   }
 
 
