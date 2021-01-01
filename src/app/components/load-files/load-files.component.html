@@ -1,5 +1,5 @@
-<ngx-dropzone (change)="onSelect($event)">
-    <ngx-dropzone-label>Upload the media, please!</ngx-dropzone-label>
+<ngx-dropzone (change)="onSelect($event)" [maxFileSize]="5242880">
+    <ngx-dropzone-label>Upload the media, please!. Max 5MB por file</ngx-dropzone-label>
     <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f"
     [removable]="true" (removed)="onRemove(f)">
         <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
