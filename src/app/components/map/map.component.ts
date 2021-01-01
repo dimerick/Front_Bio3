@@ -1,6 +1,6 @@
 /// <reference types='@runette/leaflet-fullscreen' />
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { Map, Control, DomUtil, ZoomAnimEvent, Layer, MapOptions, tileLayer, latLng, geoJSON, divIcon, Marker, Circle, circle, marker, layerGroup, Icon, LatLng, DragEndEvent, FullscreenOptions, DomEvent, TileEventHandlerFn, Bounds, LatLngBounds } from 'leaflet';
+import { Map, Control, DomUtil, ZoomAnimEvent, Layer, MapOptions, tileLayer, latLng, geoJSON, divIcon, Marker, Circle, circle, marker, layerGroup, Icon, LatLng, DragEndEvent, FullscreenOptions, DomEvent, TileEventHandlerFn, Bounds, LatLngBounds, LeafletMouseEvent } from 'leaflet';
 
 
 
@@ -194,6 +194,14 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.addEventListener('resize', (e) => {
       console.log("cambió el tamaño del mapa");
       this.onMapSizeEvent.emit(true);
+    });
+
+    this.map.addEventListener('click', (e: LeafletMouseEvent) => {
+      console.log(e);
+      if(this.markerDraggable){
+        this.mark.setLatLng(e.latlng);
+        this.markerMovedEvent.emit(e.latlng);
+      }
     });
 
     this.initialZoom = map.getZoom();

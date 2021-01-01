@@ -19,7 +19,8 @@ All other errors are RE-THROWN to be caught by the calling service so an alert c
         return next.handle(request)
         .pipe(
             catchError(err => {
-                console.log("Se produjo un error");
+                console.log(err);
+
                 if(err.status === 401 && (!request.url.endsWith('token') && !request.url.endsWith('account'))){
                     // auto logout on unauthorized response
                     console.log("Se produjó un error 401");
