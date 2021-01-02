@@ -81,6 +81,17 @@ export class UniversityComponent implements OnInit {
       created_by: currentUserId, 
       created_at: null, 
     };
+    if(university.created_by == null){
+      university = {
+        id: null, name: this.universityForm.value.name,
+        location: {
+          coordinates: [this.lon, this.lat],
+          type: "Point"
+  
+        },  
+        created_at: null, 
+      };
+    }
     Swal.fire({
       allowOutsideClick: false,
       icon: 'info',

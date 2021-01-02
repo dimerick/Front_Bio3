@@ -19,6 +19,6 @@ export interface University{
         coordinates: number[], 
         type: string
     }, 
-    created_by: number, 
+    created_by?: number, 
     created_at: string, 
 }
