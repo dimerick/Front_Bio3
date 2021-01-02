@@ -63,4 +63,17 @@ export class UserService{
 
     }
 
+    getInfoUser(idUser: number):Observable<any>{
+        
+        return this._http.get(
+            `${this.url}profile/${idUser}`
+        ).pipe(
+            map((resp) => {
+                return resp;
+            },
+            )
+        );
+
+    }
+
 }

@@ -39,6 +39,7 @@ import { ProjectListComponent } from './components/project-list/project-list.com
 import { MyPublicationsComponent } from './components/my-publications/my-publications.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 
@@ -59,7 +60,7 @@ import { ProjectDetailComponent } from './components/project-detail/project-deta
     UniversityComponent,
     ProjectComponent,
     CommunityComponent, 
-    LoadFilesComponent, ProjectListComponent, MyPublicationsComponent, GalleryComponent, ProjectDetailComponent
+    LoadFilesComponent, ProjectListComponent, MyPublicationsComponent, GalleryComponent, ProjectDetailComponent, ProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -31,6 +31,7 @@ export class SigninComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.scrollToForm();
   }
 
   onSubmit(){
@@ -94,6 +95,9 @@ export class SigninComponent implements OnInit {
     // this.eventSignInModalClose.emit(true);
   }
 
-  
+  scrollToForm(){
+    let element = document.querySelector("#contSignInForm");
+    element.scrollIntoView({ behavior: 'smooth', block: 'start'});
+  }
 
 }

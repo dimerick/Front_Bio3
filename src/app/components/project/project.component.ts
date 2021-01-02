@@ -124,6 +124,8 @@ export class ProjectComponent implements OnInit {
 
     if(this.projectForm.invalid){
 
+      
+
       return Object.values( this.projectForm.controls ).forEach( control => {
         
         if ( control instanceof FormGroup ) {
@@ -133,7 +135,9 @@ export class ProjectComponent implements OnInit {
         }
         
         
+        
       });
+      
 
     }
 

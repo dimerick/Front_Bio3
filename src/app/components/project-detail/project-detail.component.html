@@ -29,7 +29,7 @@
                     {{project.created_at | date : 'longDate'}}
                     <br>
                     <i class="fa fa-user fa-1x" aria-hidden="true" title="Date"></i>
-                    {{project.user_name}} {{project.user_last_name}}
+                    <a href="/profile/{{project.created_by}}"> {{project.user_name}} {{project.user_last_name}}</a>
                 </p>
                 <p class="lead">
                     {{project.description}}

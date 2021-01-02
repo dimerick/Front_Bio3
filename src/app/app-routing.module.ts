@@ -13,6 +13,7 @@ import { MyPublicationsComponent } from './components/my-publications/my-publica
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { CurrentUserComponent } from './components/current-user/current-user.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 
 const routes: Routes = [
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'my-publications', component: MyPublicationsComponent},
   { path: 'gallery', component: GalleryComponent},
   { path: 'project/:id', component: ProjectDetailComponent}, 
+  { path: 'profile/:id', component: ProfileComponent}, 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];

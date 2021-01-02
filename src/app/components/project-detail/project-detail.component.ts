@@ -69,8 +69,6 @@ export class ProjectDetailComponent implements OnInit {
     this.getLocation();
     this.route.params.subscribe(params => {
       this.idProject = +params['id'];
-
-      // this.getProjectNetwork();
     });
 
 
@@ -130,7 +128,7 @@ export class ProjectDetailComponent implements OnInit {
           name: resp[0].projects[0].name,
           description: resp[0].projects[0].description,
           created_at: resp[0].projects[0].created_at,
-          created_by: resp[0].projects[0].id_user,
+          created_by: resp[0].projects[0].created_by,
           user_name: resp[0].projects[0].user_name,
           user_last_name: resp[0].projects[0].user_last_name,
           main_university: resp[0].id,
@@ -152,7 +150,7 @@ this.galleryActive = true;
       resp.forEach(uni => {
 
         uni.projects.forEach(project => {
-          let num = 0;
+          
           project.aristas.forEach(arista => {
 
             let enl: Enlace = {
@@ -169,11 +167,11 @@ this.galleryActive = true;
             };
 
             this.enlaces.push(enl);
-            if (num == 0) {
-              this.mapComponent.map.panTo(enl.initPoint);
-            }
+            
+              
+            
 
-            num++;
+            
 
           });
 
@@ -365,6 +363,10 @@ this.galleryActive = true;
     pane.appendChild(svg);
 
     this.onClickLineNetwork();
+
+    map.setZoom(1);
+
+    this.mapComponent.map.panTo(this.enlaces[0].initPoint);
 
     map.setZoom(10);
 

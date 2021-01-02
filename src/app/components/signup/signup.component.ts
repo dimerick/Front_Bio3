@@ -56,9 +56,7 @@ export class SignupComponent implements OnInit {
 
   ) {
     // this.modalActive = false;
-    this.createForm();
-    this.loadFormData();
-    this.createListeners();
+    
     this.resultUni = [];
     this.lat = 200;
     this.lon = 200;
@@ -68,6 +66,9 @@ export class SignupComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.createForm();
+    this.loadFormData();
+    this.createListeners();
     this.getLocation();
     this.getUniversities();
   }
@@ -172,15 +173,12 @@ export class SignupComponent implements OnInit {
 
         },
         (err) => {
-          console.log(err.error.email);
-          if (err.error.email) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error al registrarse',
-              text: err.error.email.join(',')
-            });
-
-          }
+          console.log(err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al registrarse',
+            text: ''
+          });
 
         }
       );
@@ -240,6 +238,8 @@ export class SignupComponent implements OnInit {
     );
     this.getDegrees();
     this.getFieldsOfStudy();
+    
+    this.scrollToForm();
   }
 
   createListeners() {
@@ -368,7 +368,10 @@ export class SignupComponent implements OnInit {
   }
 
 
-
+scrollToForm(){
+  let element = document.querySelector("#contSignUpForm");
+  element.scrollIntoView({ behavior: 'smooth', block: 'start'});
+}
 
 
 }
