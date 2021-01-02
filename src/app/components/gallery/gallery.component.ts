@@ -33,12 +33,17 @@ export class GalleryComponent implements OnInit {
     this.projectService.getProjectsExpanded().subscribe(resp => {
       
       this.projects = resp;
-      Swal.close()
+      Swal.close();
 
       
     },
       (err) => {
-
+        Swal.fire({
+          icon: 'error', 
+          title: 'Error', 
+          text: err
+          
+        });
       });
 
   }
