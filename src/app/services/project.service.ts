@@ -191,6 +191,18 @@ export class ProjectService{
         );
     }
 
+    getNodesBySearch(inputSearch: string):Observable<any>{
+        return this._http.get(
+            `${this.url}nodes-network?search=${inputSearch}`
+        ).pipe(
+            map( (resp) => {
+                return resp;
+            }
+            )
+            
+        );
+    }
+
     getNodesById(idProject: number):Observable<any>{
         return this._http.get(
             `${this.url}nodes-network/${idProject}`
