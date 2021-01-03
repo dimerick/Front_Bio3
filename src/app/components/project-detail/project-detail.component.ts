@@ -162,7 +162,7 @@ this.galleryActive = true;
               endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
               type: arista.type,
               priority: arista.rn,
-              nameEntities: uni.name + ' <=> ' + arista.assoc_name
+              nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name
 
             };
 
@@ -228,7 +228,8 @@ this.galleryActive = true;
           this.mapComponent.showInfoLayer(`
           <div class="row">
                                 <div class="col-md-12">
-                                    <div class="">
+                                    <div class="text-center">
+
                                     <i class="fa fa-university fa-2x" aria-hidden="true" title="University"></i>
                                         <h5>${e.name}</h5>
                                         
@@ -263,7 +264,7 @@ this.galleryActive = true;
           this.mapComponent.showInfoLayer(`
           <div class="row">
                                 <div class="col-md-12">
-                                    <div class="">
+                                    <div class="text-center">
                                     
                                     <i class="fa fa-users fa-2x" aria-hidden="true" title="Community"></i>
                                         <h5>${e.name}</h5>
@@ -494,15 +495,18 @@ this.galleryActive = true;
   <div class="row">
                         <div class="col-md-12">
                             <div>
-                            
+                            <div class="text-center">
                             <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
                             
-                                <h5>${enl.name}</h5><br>
+                                <h5>${enl.name}</h5>
                                 ${enl.nameEntities}                                         
-                                
-                                <p>
+                                <br>
+                                <br>
+                                <p class="text-left">
                                 ${enl.description.replace(/\n/g, "<br />")}
                                 </p>
+                            </div>
+                            
 
                                 <div class="grid-image"> 
                                 

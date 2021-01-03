@@ -135,7 +135,7 @@ export class ProjectNetworkComponent implements OnInit {
               endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
               type: arista.type,
               priority: arista.rn,
-              nameEntities: uni.name + ' <=> ' + arista.assoc_name
+              nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name
 
             };
 
@@ -182,7 +182,7 @@ export class ProjectNetworkComponent implements OnInit {
               endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
               type: arista.type,
               priority: arista.rn,
-              nameEntities: uni.name + ' <=> ' + arista.assoc_name
+              nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name
 
             };
 
@@ -639,11 +639,10 @@ export class ProjectNetworkComponent implements OnInit {
                             <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
                             
                                 <a href="project/${enl.id}"><h5>${enl.name}</h5></a>
-                                <br>
-                                <br>
                                 ${enl.nameEntities}                                         
-                                
-                                <p>
+                                <br>
+                                <br>
+                                <p class="text-left">
                                 ${enl.description.replace(/\n/g, "<br />")}
                                 </p>
 

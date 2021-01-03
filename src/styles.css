@@ -349,3 +349,6 @@
    left: 0;
    top: 0;
 } */
+.p-formatted{
+   white-space: pre-wrap!important;
+}
