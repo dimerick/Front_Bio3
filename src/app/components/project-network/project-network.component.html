@@ -11,7 +11,8 @@
                     <app-map
                     [lat]="lat" 
                     [lon]="lon" 
-                    [markerActive]="false" 
+                    [markerActive]="false"
+                    [searchControlActive]="true"  
                     [zoom]="15" 
                     [height]="400" 
                     [layers]="layers" 
@@ -19,7 +20,8 @@
                     (mapReadyEvent)="mapReady($event)" 
                     (mapZoomEndEvent)="mapZoomEnd($event)"
                     (onMapMoveEndEvent)="mapMoveEnd($event)" 
-                    (onMapSizeEvent)="mapSizeChange($event)"
+                    (onMapSizeEvent)="mapSizeChange($event)" 
+                    (searchActiveEvent)="searchActive($event)"
                     ></app-map>
                 </div>
             </div>

@@ -30,6 +30,27 @@
   
 </div>
 
+<div id="icon-search-map" class="leaflet-bar leaflet-control" *ngIf="searchControlActive">
+  <a href="javascript:void(0)" (click)="toggleModalSearchActive()">
+    <i class="fa fa-search" aria-hidden="true" title="search-map"></i>
+</a>
+</div>
+
+<div id="search-box" class="notification pos-top pos-right search-box bg--white border--bottom" data-animation="from-top" [ngClass]="{'notification--reveal':modalSearchActive}" 
+        [ngClass]="{'notification--dismissed':false}">
+            <form>
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8">
+                        <input id="inputSearch" [(ngModel)]="inputSearch" type="search" name="query" placeholder="Type search query and hit enter" />
+                    </div>
+                </div>
+                <!--end of row-->
+            </form>
+            <div class="notification-close-cross" (click)="toggleModalSearchActive()"></div>
+        </div>
+
+
+
 <!-- <div id="info-layer" class="pos-top pos-right show-info-layer search-box bg--white border--bottom" data-animation="from-top"
       [ngClass]="{'notification--reveal':showInfoLayerActive}" [ngClass]="{'notification--dismissed':false}">
       <div class="row">

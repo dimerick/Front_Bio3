@@ -143,6 +143,44 @@ export class ProjectNetworkComponent implements OnInit {
       });
   }
 
+  getProjectNetworkBySearch(inputSearch: string) {
+    this.projectService.getProjectNetworkBySearch(inputSearch).subscribe(resp => {
+      this.enlaces = [];
+      console.log(resp);
+      resp.forEach(uni => {
+        
+        uni.projects.forEach(project => {    
+
+          project.aristas.forEach(arista => {    
+
+            let enl: Enlace = {
+              id: project.id,
+              name: project.name,
+              description: project.description,
+              createdAt: project.created_at,
+              initPoint: latLng([uni.lat, uni.long]),
+              endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
+              type: arista.type, 
+              priority: arista.rn, 
+              nameEntities: uni.name + ' <=> ' + arista.assoc_name
+  
+            };
+
+            this.enlaces.push(enl);
+
+          });
+
+        });
+
+      });
+
+      this.drawEnlaces();
+    },
+      (err) => {
+        console.log(err);
+      });
+  }
+
   getNodes(){
     this.projectService.getNodes().subscribe(resp => {
       console.log(resp);
@@ -472,6 +510,16 @@ if(enl.id == idEnl && enl.priority == priority){
 
 }
 });
+}
+
+searchActive(inputSearch: string){
+console.log(inputSearch);
+let element = document.getElementById("canvas-project-network");
+if(element != null){
+  element.parentNode.removeChild(element);
+}
+
+this.getProjectNetworkBySearch(inputSearch);
 }
 
 }

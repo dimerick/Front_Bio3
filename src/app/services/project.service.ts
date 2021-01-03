@@ -153,6 +153,19 @@ export class ProjectService{
         );
     }
 
+    getProjectNetworkBySearch(inputSearch: string):Observable<any>{
+        return this._http.get(
+            `${this.url}project-network-expanded?search=${inputSearch}`
+        ).pipe(
+            map( resp => {
+                return resp;
+                
+            }
+            )
+            
+        );
+    }
+
     getProjectNetworkById(idProject: number):Observable<any>{
         return this._http.get(
             `${this.url}project-network-expanded/${idProject}`

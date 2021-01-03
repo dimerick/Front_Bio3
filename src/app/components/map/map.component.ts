@@ -45,6 +45,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @Output() mapZoomEndEvent: EventEmitter<ZoomAnimEvent> = new EventEmitter;
   @Output() onMapMoveEndEvent: EventEmitter<boolean> = new EventEmitter;
   @Output() onMapSizeEvent: EventEmitter<boolean> = new EventEmitter;
+  @Output() searchActiveEvent: EventEmitter<string> = new EventEmitter;
   @Input() markerDraggable: boolean;
   public fullscreenOptions: FullscreenOptions = {
     position: 'topleft',
@@ -66,6 +67,9 @@ export class MapComponent implements OnInit, OnDestroy {
   public actTop: number = 0;
   public actLeft: number = 0;
   public boundsMap: LatLngBounds;
+  public modalSearchActive = false;
+  public inputSearch = '';
+  @Input() searchControlActive: boolean;
   public Custom = Control.extend({
 
     onAdd(map: Map) {
@@ -92,6 +96,18 @@ export class MapComponent implements OnInit, OnDestroy {
     onRemove(map: Map) { }
   });
 
+  public CustomSearchMap = Control.extend({
+
+    onAdd(map: Map) {
+
+      let container = DomUtil.get('icon-search-map');
+
+      DomEvent.disableClickPropagation(container);
+
+      return container;
+    },
+    onRemove(map: Map) { }
+  });
 
   constructor() {
 
@@ -198,7 +214,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.map.addEventListener('click', (e: LeafletMouseEvent) => {
       console.log(e);
-      if(this.markerDraggable){
+      if (this.markerDraggable) {
         this.mark.setLatLng(e.latlng);
         this.markerMovedEvent.emit(e.latlng);
       }
@@ -212,11 +228,22 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.actTop = this.map.getBounds().getNorth();
     this.actLeft = this.map.getBounds().getWest();
-    
+
     // this.mapLayer = new this.CustomInfoMap({
     //   position: 'bottomleft'
     // });
     //this.map.addControl(this.mapLayer);
+
+    let searchLayer = new this.CustomSearchMap({
+      position: 'topleft'
+    });
+    if(this.searchControlActive){
+      this.map.addControl(searchLayer);
+    }
+    
+    this.listenInputSearch();
+
+
   }
 
   onMapZoomEnd(e: ZoomAnimEvent) {
@@ -315,13 +342,32 @@ export class MapComponent implements OnInit, OnDestroy {
 
   }
 
-  setScaleDiff(scaleDiff: number){
-this.scaleDiff = scaleDiff;
+  setScaleDiff(scaleDiff: number) {
+    this.scaleDiff = scaleDiff;
   }
 
-getBounds(){
-  this.actTop = this.map.getBounds().getNorth();
-  this.actLeft = this.map.getBounds().getWest();
-}
+  getBounds() {
+    this.actTop = this.map.getBounds().getNorth();
+    this.actLeft = this.map.getBounds().getWest();
+  }
+
+  toggleModalSearchActive() {
+    let searchBox = document.getElementById("search-box");
+    searchBox.classList.remove("notification--dismissed");
+    this.modalSearchActive = !this.modalSearchActive;
+    // console.log(this.modalSearchActive);
+  }
+
+  listenInputSearch() {
+    let input = document.getElementById("inputSearch");
+
+    input.addEventListener("keyup", (e) => {
+      // console.log(e.key);
+      if (e.key == 'Enter') {
+console.log(this.inputSearch);
+this.searchActiveEvent.emit(this.inputSearch);
+      }
+    });
+  }
 
 }

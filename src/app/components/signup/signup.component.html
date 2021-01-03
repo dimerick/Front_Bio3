@@ -119,8 +119,8 @@
                                 <br>
     
                                 <div *ngIf="lat != 200 && lon != 200">
-                                    <app-map [lat]="lat" [lon]="lon" [markerDraggable]="false" [markerActive]="true"
-                                        [zoom]="15" [height]="400" [layers]="layers"
+                                    <app-map [lat]="lat" [lon]="lon" [markerDraggable]="false" [markerActive]="true" 
+                                    [searchControlActive]="false" [zoom]="15" [height]="400" [layers]="layers"
                                         (markerMovedEvent)="markerMoved($event)"></app-map>
                                 </div>
                             </div>
