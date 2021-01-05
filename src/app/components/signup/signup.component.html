@@ -43,35 +43,36 @@
                     <form id="signUpForm" [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
                         <div class="row">
                             <div class="col-12">
-                                <input type="text" name="name" placeholder="Ingrese su nombre" formControlName="name" />
+                                <label>Your Name:</label>
+                                <input type="text" name="name" placeholder="Name" formControlName="name" />
                                 <p *ngIf="signUpForm.get('name').invalid && signUpForm.get('name').touched"
-                                    class="color--error">Debes
-                                    ingresar tu nombre</p>
+                                    class="color--error">Your name is required</p>
                             </div>
                             <div class="col-12">
-                                <input type="text" name="last_name" placeholder="Ingrese su apellido"
+                                <label>Your Last Name:</label>
+                                <input type="text" name="last_name" placeholder="Lastname"
                                     formControlName="last_name" />
                                 <p *ngIf="signUpForm.get('last_name').invalid && signUpForm.get('last_name').touched"
-                                    class="color--error">Debes
-                                    ingresar tu apellido</p>
+                                    class="color--error">Your last name is required</p>
                             </div>
     
                             <div class="col-12">
-                                <input type="email" name="email" placeholder="Ingrese su email" formControlName="email" />
+                                <label>Email Address:</label>
+                                <input type="email" name="email" placeholder="you@something.com" formControlName="email" />
                                 <div *ngIf="signUpForm.get('email').errors">
                                     <p *ngIf="signUpForm.get('email').errors.required && signUpForm.get('email').touched"
                                         class="color--error">
-                                        Debes ingresar tu email</p>
+                                        Your email is required</p>
                                     <p *ngIf="signUpForm.get('email').errors.pattern && signUpForm.get('email').touched"
                                         class="color--error">
-                                        Ingrese un email valido</p>
+                                        The email is not valid</p>
                                     <p *ngIf="signUpForm.get('email').errors.existe && signUpForm.get('email').touched"
-                                        class="color--error">El
-                                        email ya fue registrado</p>
+                                        class="color--error">This email is already registered</p>
                                 </div>
                             </div>
     
                             <div class="col-12">
+                                <label>Select Your Academic Degree:</label>
                                 <div class="input-select">
                                     <select formControlName="degree">
                                         <option *ngFor="let degree of degrees; let i = index" [value]="degrees[i].id">
@@ -79,12 +80,12 @@
                                         </option>
                                     </select>
                                     <p *ngIf="signUpForm.get('degree').invalid && signUpForm.get('degree').touched"
-                                        class="color--error">Debes
-                                        indicar tus niveles de estudio</p>
+                                        class="color--error">Your academic degree is required</p>
                                 </div>
                             </div>
     
                             <div class="col-12">
+                                <label>Select Your Field Of Study:</label>
                                 <div class="input-select">
                                     <select formControlName="field_of_study">
                                         <option *ngFor="let field of fieldsOfStudy; let i = index"
@@ -93,31 +94,26 @@
                                         </option>
                                     </select>
                                     <p *ngIf="signUpForm.get('field_of_study').invalid && signUpForm.get('field_of_study').touched"
-                                        class="color--error">Debes
-                                        indicar tu principal area de estudio</p>
+                                        class="color--error">Your field of study is required</p>
                                 </div>
                             </div>
     
                             <div class="col-md-12">
+                                <label>Description:</label>
                                 <textarea name="description" placeholder="Ingrese su descripción personal"
                                     class="validate-required" rows="4" formControlName="description"></textarea>
                                 <p *ngIf="signUpForm.get('description').invalid && signUpForm.get('description').touched"
-                                    class="color--error">Debes
-                                    ingresar tu descripción personal</p>
+                                    class="color--error">Your description is required</p>
                             </div>
     
                             <div class="col-12">
+                                <label>Select Your University or <span><a (click)="toggleAddUniversity()" href="javascript: void(0)">¿Add a new university?</a></span></label>
                                 <ng-select class="custom" [items]="universities" bindLabel="name" bindValue="id"
                                     formControlName="university" placeholder="Ingrese el nombre de su universidad"
                                     (change)="onChange($event)"></ng-select>
                                 <p *ngIf="signUpForm.get('university').invalid && signUpForm.get('university').touched"
-                                    class="color--error">Debes
-                                    ingresar la universidad a la cual estas adscrito</p>
-                                <span><a (click)="toggleAddUniversity()" href="javascript: void(0)">¿Agregar una nueva
-                                        universidad?</a></span>
-                                <br>
-                                <br>
-    
+                                    class="color--error">Your university is required</p>
+                                <br>    
                                 <div *ngIf="lat != 200 && lon != 200">
                                     <app-map [lat]="lat" [lon]="lon" [markerDraggable]="false" [markerActive]="true" 
                                     [searchControlActive]="false" [zoom]="15" [height]="400" [layers]="layers"
@@ -126,27 +122,27 @@
                             </div>
     
                             <div class="col-md-12">
-                                <textarea placeholder="Ingrese los links de sus publicaciones" class="validate-required"
+                                <label>Personal Links:</label>
+                                <textarea placeholder="Personal Links" class="validate-required"
                                     rows="4" formControlName="websites"></textarea>
                                 <p *ngIf="signUpForm.get('websites').invalid && signUpForm.get('websites').touched"
-                                    class="color--error">Debes
-                                    ingresar los links de tus publicaciones</p>
+                                    class="color--error">Your personal links is required</p>
                             </div>
     
                             <div class="col-12">
-                                <input type="password" name="Password" placeholder="Ingrese su contraseña"
+                                <label>Password:</label>
+                                <input type="password" name="Password" placeholder="Password"
                                     formControlName="password" />
                                 <p *ngIf="signUpForm.get('password').invalid && signUpForm.get('password').touched"
-                                    class="color--error">Debes
-                                    ingresar tu contraseña</p>
+                                    class="color--error">Your password is required</p>
                             </div>
     
                             <div class="col-12">
-                                <input type="password" name="Password" placeholder="Repita la contraseña"
+                                <label>Confirm Your Password:</label>
+                                <input type="password" name="Password" placeholder="Confirm Your Password"
                                     formControlName="confirmPassword" />
                                 <p *ngIf="noMatchPasswords() && signUpForm.get('confirmPassword').touched"
-                                    class="color--error">Las
-                                    contraseñas no coinciden</p>
+                                    class="color--error">The passwords do not match</p>
                             </div>
     
                             <div class="col-12">
