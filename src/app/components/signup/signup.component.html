@@ -105,8 +105,25 @@
                                 <p *ngIf="signUpForm.get('description').invalid && signUpForm.get('description').touched"
                                     class="color--error">Your description is required</p>
                             </div>
-    
+
                             <div class="col-12">
+                                <div class="input-checkbox">
+                                    <input id="check-independent-invest" type="checkbox" name="independent-invest" formControlName="independentInvestigator">
+                                    <label for="check-independent-invest"></label>
+                                </div>
+                                <span>I am an independent investigator</span>
+                            </div>
+
+                            <div class="col-12" *ngIf="independentInvestigator">
+                                <label>Choose your location on the map</label>
+                                <div *ngIf="lat2 != 200 && lon2 != 200">
+                                    <app-map [lat]="lat2" [lon]="lon2" [markerDraggable]="true" [markerActive]="true" 
+                                    [searchControlActive]="false" [zoom]="15" [height]="400" [layers]="layers2"
+                                        (markerMovedEvent)="marker2Moved($event)" (markAddedEvent)="marker2Added($event)"></app-map>
+                                </div>
+                            </div>
+    
+                            <div class="col-12" *ngIf="!independentInvestigator">
                                 <label>Select Your University or <span><a (click)="toggleAddUniversity()" href="javascript: void(0)">¿Add a new university?</a></span></label>
                                 <ng-select class="custom" [items]="universities" bindLabel="name" bindValue="id"
                                     formControlName="university" placeholder="Ingrese el nombre de su universidad"
@@ -117,7 +134,7 @@
                                 <div *ngIf="lat != 200 && lon != 200">
                                     <app-map [lat]="lat" [lon]="lon" [markerDraggable]="false" [markerActive]="true" 
                                     [searchControlActive]="false" [zoom]="15" [height]="400" [layers]="layers"
-                                        (markerMovedEvent)="markerMoved($event)"></app-map>
+                                        (markerMovedEvent)="markerMoved($event)" (markAddedEvent)="markerAdded($event)"></app-map>
                                 </div>
                             </div>
     
@@ -147,8 +164,8 @@
     
                             <div class="col-12">
                                 <div class="input-checkbox">
-                                    <input id="check-test" type="checkbox" name="agree" formControlName="agree">
-                                    <label for="check-test"></label>
+                                    <input id="check-agree" type="checkbox" name="agree" formControlName="agree">
+                                    <label for="check-agree"></label>
                                 </div>
                                 <span>I have read and agree to the
                                     <a href="#">terms and conditions</a>

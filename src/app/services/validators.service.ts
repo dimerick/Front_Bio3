@@ -1,6 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { LatLng, Marker } from 'leaflet';
 import { Observable } from 'rxjs';
 import { Project } from '../models/project';
 import { UserService } from './user.service';
@@ -92,6 +93,27 @@ export class ValidatorsService {
 
     }
   }
+
+  typeInvestigator(independentInvestigator: string, university: string) {
+      return (formGroup: FormGroup) => {
+        const independentInvestigatorControl = formGroup.controls[independentInvestigator];
+        const universityControl = formGroup.controls[university];
+
+        if(!independentInvestigatorControl.value && universityControl.value == null){
+          universityControl.setErrors({ noUniversitySelected: true });
+        }else {
+          universityControl.setErrors(null);
+        }
+
+        // if(independentInvestigatorControl.value && !mark2Moved){
+        //   independentInvestigatorControl.setErrors({ noLocationEstablished: true });
+        // }
+        // else{
+        //   independentInvestigatorControl.setErrors(null);
+        // }
+      }
+      
+    }
 
 
 }

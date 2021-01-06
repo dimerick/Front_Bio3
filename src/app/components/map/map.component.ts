@@ -46,6 +46,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @Output() onMapMoveEndEvent: EventEmitter<boolean> = new EventEmitter;
   @Output() onMapSizeEvent: EventEmitter<boolean> = new EventEmitter;
   @Output() searchActiveEvent: EventEmitter<string> = new EventEmitter;
+  @Output() markAddedEvent: EventEmitter<Marker> = new EventEmitter;
   @Input() markerDraggable: boolean;
   public fullscreenOptions: FullscreenOptions = {
     position: 'topleft',
@@ -118,9 +119,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initializeMap();
-    if (this.markerActive) {
-      this.createMarker();
-    }
+
 
 
     this.options = {
@@ -237,12 +236,14 @@ export class MapComponent implements OnInit, OnDestroy {
     let searchLayer = new this.CustomSearchMap({
       position: 'topleft'
     });
-    if(this.searchControlActive){
+    if (this.searchControlActive) {
       this.map.addControl(searchLayer);
     }
-    
-    this.listenInputSearch();
 
+    this.listenInputSearch();
+    if (this.markerActive) {
+      this.createMarker();
+    }
 
   }
 
@@ -288,8 +289,11 @@ export class MapComponent implements OnInit, OnDestroy {
       console.log(e);
       this.markerMoved(e);
     });
-    this.layers.push(mark);
+
+    this.map.addLayer(mark);
+    this.markAddedEvent.emit(mark);
     this.mark = mark;
+
 
   }
 
@@ -364,8 +368,8 @@ export class MapComponent implements OnInit, OnDestroy {
     input.addEventListener("keyup", (e) => {
       // console.log(e.key);
       if (e.key == 'Enter') {
-console.log(this.inputSearch);
-this.searchActiveEvent.emit(this.inputSearch);
+        console.log(this.inputSearch);
+        this.searchActiveEvent.emit(this.inputSearch);
       }
     });
   }

@@ -40,6 +40,7 @@ import { MyPublicationsComponent } from './components/my-publications/my-publica
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { InvestigatorComponent } from './components/investigator/investigator.component';
 
 
 
@@ -60,7 +61,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     UniversityComponent,
     ProjectComponent,
     CommunityComponent, 
-    LoadFilesComponent, ProjectListComponent, MyPublicationsComponent, GalleryComponent, ProjectDetailComponent, ProfileComponent
+    LoadFilesComponent, ProjectListComponent, MyPublicationsComponent, GalleryComponent, ProjectDetailComponent, ProfileComponent, InvestigatorComponent
   ],
   imports: [
     BrowserModule,

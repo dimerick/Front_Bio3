@@ -8,13 +8,14 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ValidatorsService } from 'src/app/services/validators.service';
 import { Place } from 'src/app/models/place';
-import { LatLng, Layer } from 'leaflet';
+import { latLng, LatLng, Layer, Marker } from 'leaflet';
 import { faOm } from '@fortawesome/free-solid-svg-icons';
 import { CategoryService } from 'src/app/services/category.service';
 import { Profile } from 'src/app/models/profile';
 import { University } from 'src/app/models/university';
 import { UniversityService } from 'src/app/services/university.service';
 import { MapComponent } from '../map/map.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -31,8 +32,15 @@ export class SignupComponent implements OnInit {
   public url: string;
   public lat: number;
   public lon: number;
+  public lat2: number;
+  public lon2: number;
+  public mark1: Marker;
+  public mark2: Marker;
+  public mark2Moved = false;
+  public initLatLng2: LatLng;
   public finishedGetLocation: boolean;
   public layers: Layer[];
+  public layers2: Layer[];
   public degrees = [];
   public fieldsOfStudy = [];
   public universities: any[] = [];
@@ -40,6 +48,7 @@ export class SignupComponent implements OnInit {
   @ViewChild(MapComponent)
   private mapComponent: MapComponent;
   public universityRegistered: University;
+  public independentInvestigator: false;
 
   // @Input() modalActive: boolean;
   // @Output() eventSignUpModalClose = new EventEmitter<boolean>();
@@ -56,11 +65,14 @@ export class SignupComponent implements OnInit {
 
   ) {
     // this.modalActive = false;
-    
+
     this.resultUni = [];
     this.lat = 200;
     this.lon = 200;
+    this.lat2 = 200;
+    this.lon2 = 200;
     this.layers = [];
+    this.layers2 = [];
 
   }
 
@@ -68,24 +80,24 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.loadFormData();
-    this.createListeners();
     this.getLocation();
     this.getUniversities();
+    this.createListeners();
   }
 
   onSubmit() {
 
-    if(this.signUpForm.invalid){
+    if (this.signUpForm.invalid) {
 
-      return Object.values( this.signUpForm.controls ).forEach( control => {
-        
-        if ( control instanceof FormGroup ) {
-          Object.values( control.controls ).forEach( control => control.markAsTouched() );
+      return Object.values(this.signUpForm.controls).forEach(control => {
+
+        if (control instanceof FormGroup) {
+          Object.values(control.controls).forEach(control => control.markAsTouched());
         } else {
           control.markAsTouched();
         }
-        
-        
+
+
       });
 
     }
@@ -96,7 +108,7 @@ export class SignupComponent implements OnInit {
     Swal.fire({
       allowOutsideClick: false,
       icon: 'info',
-      text: 'Espere por favor...',
+      text: 'Wait please...',
 
     });
 
@@ -108,26 +120,42 @@ export class SignupComponent implements OnInit {
           console.log(resp);
 
           let idRegistrado = resp.id;
-          // let university = new University(null, this.signUpForm.value.university, `POINT(${this.lon} ${this.lat})`);
 
-          // let university: University = {
-          //   id: null, name: this.signUpForm.value.name,
-          //   location: {
-          //     coordinates: [this.lon, this.lat],
-          //     type: "Point"
+          if (this.signUpForm.value.independentInvestigator) {
 
-          //   }
-          // };
-          let profile: Profile = this.signUpForm.value;
-                profile.user = idRegistrado;
-                // profile.university = idUniversity;
-          this._userService.createProfile(profile)
-                  .subscribe(
-                    resp => {
-                      console.log(resp);
-                      if(this.universityRegistered){
-                        this.universityRegistered.created_by = idRegistrado;
-                      this.universityService
+            let university: University = {
+              id: null, name: 'Independent Investigator ' + idRegistrado,
+              location: {
+                coordinates: [this.mark2.getLatLng().lng, this.mark2.getLatLng().lat],
+                type: "Point"
+
+              },
+              created_by: idRegistrado,
+              created_at: null,
+            };
+
+            Swal.fire({
+              allowOutsideClick: false,
+              icon: 'info',
+              text: 'Registering location...',
+
+            });
+
+            Swal.showLoading();
+
+            this.addIndependentInvestigator(university).subscribe(resp => {
+
+              let profile: Profile = this.signUpForm.value;
+            profile.user = idRegistrado;
+            profile.university = resp.id;
+            // profile.university = idUniversity;
+            this._userService.createProfile(profile)
+              .subscribe(
+                resp => {
+                  console.log(resp);
+                  if (this.universityRegistered) {
+                    this.universityRegistered.created_by = idRegistrado;
+                    this.universityService
                       .updateOwnerUniversity(this.universityRegistered, idRegistrado)
                       .subscribe(resp => {
                         this.signUpForm.reset();
@@ -135,40 +163,93 @@ export class SignupComponent implements OnInit {
                         Swal.fire({
                           icon: 'success',
                           title: 'Registro exitoso'
-  
+
                         });
-                      }, 
-                      (err)=> {
-                        
-                      });
-                      }
-                      else{
+                      },
+                        (err) => {
+
+                        });
+                  }
+                  else {
+                    this.signUpForm.reset();
+                    // this.modalActive = false;
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Registro exitoso'
+
+                    });
+                  }
+
+
+                },
+                (err) => {
+                  console.log(err);
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error creating profile',
+                    text: err
+                  });
+                }
+              );
+
+            },
+              (err) => {
+
+              });
+
+          } else {
+
+            let profile: Profile = this.signUpForm.value;
+            profile.user = idRegistrado;
+            // profile.university = idUniversity;
+            this._userService.createProfile(profile)
+              .subscribe(
+                resp => {
+                  console.log(resp);
+                  if (this.universityRegistered) {
+                    this.universityRegistered.created_by = idRegistrado;
+                    this.universityService
+                      .updateOwnerUniversity(this.universityRegistered, idRegistrado)
+                      .subscribe(resp => {
                         this.signUpForm.reset();
                         // this.modalActive = false;
                         Swal.fire({
                           icon: 'success',
                           title: 'Registro exitoso'
-  
-                        });
-                      }
-                      
-                      
-                    },
-                    (err) => {
-                      console.log(err);
-                    }
-                  );
-          // this.universityService.createUniversity(university)
-          //   .subscribe(
-          //     resp => {
-          //       console.log(resp);
-          //       let idUniversity = resp.id;
 
-          //     },
-          //     (err) => {
-          //       console.log(err);
-          //     }
-          //   );
+                        });
+                      },
+                        (err) => {
+
+                        });
+                  }
+                  else {
+                    this.signUpForm.reset();
+                    // this.modalActive = false;
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Registro exitoso'
+
+                    });
+                  }
+
+
+                },
+                (err) => {
+                  console.log(err);
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error creating profile',
+                    text: err
+                  });
+                }
+              );
+
+
+          }
+
+
+
 
 
         },
@@ -207,14 +288,18 @@ export class SignupComponent implements OnInit {
       degree: ['', Validators.required],
       field_of_study: ['', Validators.required],
       description: ['', Validators.required],
-      university: ['', Validators.required],
+      independentInvestigator: [false],
+      university: [''],
       websites: ['', Validators.required],
       //university: ['', Validators.required],  
       password: ['', Validators.required],
-      confirmPassword: ['', Validators.required], 
+      confirmPassword: ['', Validators.required],
       agree: [false, Validators.requiredTrue]
     }, {
-      validators: this.validatorsService.passwordMatch('password', 'confirmPassword')
+      validators: [
+        this.validatorsService.passwordMatch('password', 'confirmPassword'),
+        this.validatorsService.typeInvestigator('independentInvestigator', 'university'),
+      ]
     });
     console.log(this.signUpForm);
   }
@@ -228,25 +313,39 @@ export class SignupComponent implements OnInit {
         degree: '',
         field_of_study: '',
         description: '',
+        independentInvestigator: false,
         university: null,
         websites: '',
         //university: '', 
         password: '',
-        confirmPassword: '', 
+        confirmPassword: '',
         agree: false
       }
     );
     this.getDegrees();
     this.getFieldsOfStudy();
-    
+
     this.scrollToForm();
   }
 
   createListeners() {
 
+    this.signUpForm.get('independentInvestigator').valueChanges.subscribe(value => {
+      console.log(value);
+      this.independentInvestigator = value;
+
+      if (!this.independentInvestigator) {
+        if (this.mark2 != null) {
+          this.mapComponent.map.removeLayer(this.mark2);
+        }
+      }
+
+    });
+
     this.signUpForm.valueChanges.subscribe(form => {
-      //console.log(form);
-      console.log(this.signUpForm);
+    // console.log(form);
+    console.log(this.signUpForm);
+
 
 
     });
@@ -285,12 +384,18 @@ export class SignupComponent implements OnInit {
 
         this.lat = position.coords.latitude;
         this.lon = position.coords.longitude;
+        this.lat2 = position.coords.latitude;
+        this.lon2 = position.coords.longitude;
+        this.initLatLng2 = latLng(position.coords.latitude, position.coords.longitude);
         console.log(`Se obtuvo la ubicacion ${this.lat}-${this.lon}`);
 
       });
     } else {
       this.lat = 39.952583;
       this.lon = -75.165222;
+      this.lat2 = 39.952583;
+      this.lon2 = -75.165222;
+      this.initLatLng2 = latLng(39.952583, -75.165222);
 
     }
 
@@ -302,6 +407,14 @@ export class SignupComponent implements OnInit {
     console.log(e);
     this.lat = e.lat;
     this.lon = e.lng;
+  }
+
+  marker2Moved(e: LatLng) {
+    console.log(e);
+    this.lat2 = e.lat;
+    this.lon2 = e.lng;
+    console.log(this.mark2);
+    this.mark2Moved = true;
   }
 
   getDegrees() {
@@ -353,7 +466,7 @@ export class SignupComponent implements OnInit {
     document.body.classList.toggle("modal-open");
     console.log(this.modalAddUniversityActive);
     this.modalAddUniversityActive = !this.modalAddUniversityActive;
-    
+
   }
 
   universiyRegistered(e: University) {
@@ -368,10 +481,32 @@ export class SignupComponent implements OnInit {
   }
 
 
-scrollToForm(){
-  let element = document.querySelector("#contSignUpForm");
-  element.scrollIntoView({ behavior: 'smooth', block: 'start'});
-}
+  scrollToForm() {
+    let element = document.querySelector("#contSignUpForm");
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
+  markerAdded(e: Marker) {
+    this.mark1 = e;
+  }
+
+  marker2Added(e: Marker) {
+    this.mark2 = e;
+  }
+
+  addIndependentInvestigator = (university: University): Observable<University> => new Observable(subscriber => {
+
+    this.universityService.createUniversity(university)
+      .subscribe(
+        (resp: University) => {
+          subscriber.next(resp);
+          subscriber.complete();
+        },
+        (err) => {
+          subscriber.error(err);
+        }
+      );
+
+  });
 
 }
