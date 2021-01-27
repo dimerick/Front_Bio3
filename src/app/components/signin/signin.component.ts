@@ -78,7 +78,7 @@ export class SigninComponent implements OnInit {
         if(err.error){
           Swal.fire({
             icon: 'error', 
-            title: 'Error al autenticar', 
+            title: 'Error', 
             text: err.error.detail, 
             
           });

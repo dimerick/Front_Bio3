@@ -157,7 +157,7 @@ export class ProjectComponent implements OnInit {
     Swal.fire({
       allowOutsideClick: false,
       icon: 'info',
-      text: 'Creando proyecto...',
+      text: 'Loading project...',
 
     });
     Swal.showLoading();
@@ -197,7 +197,7 @@ export class ProjectComponent implements OnInit {
           Swal.fire({
             allowOutsideClick: false,
             icon: 'info',
-            text: 'Creando entidades asociadas...',
+            text: 'Loading associated entities...',
 
           });
           Swal.showLoading();
@@ -209,7 +209,7 @@ export class ProjectComponent implements OnInit {
               Swal.fire({
                 allowOutsideClick: false,
                 icon: 'info',
-                text: 'Cargando imagenes...',
+                text: 'Loading images...',
 
               });
               Swal.showLoading();
@@ -217,7 +217,7 @@ export class ProjectComponent implements OnInit {
 
                 Swal.fire({
                   icon: 'success',
-                  title: 'Proyecto registrado exitosamente'
+                  title: 'Project registration was successful'
 
                 });
 
@@ -227,7 +227,7 @@ export class ProjectComponent implements OnInit {
                 (err) => {
                   Swal.fire({
                     icon: 'error',
-                    title: 'Error cargando las imagenes del proyecto',
+                    title: 'Error loading images',
                     text: err
                   });
                 });
@@ -236,7 +236,7 @@ export class ProjectComponent implements OnInit {
 
               Swal.fire({
                 icon: 'success',
-                title: 'Proyecto registrado exitosamente'
+                title: 'Project registration was successful'
 
               });
 
@@ -250,7 +250,7 @@ export class ProjectComponent implements OnInit {
             (err) => {
               Swal.fire({
                 icon: 'error',
-                title: 'Error creando entidades asociadas',
+                title: 'Error loading associated entities',
                 text: err
               });
 
@@ -262,7 +262,7 @@ export class ProjectComponent implements OnInit {
             Swal.fire({
               allowOutsideClick: false,
               icon: 'info',
-              text: 'Cargando imagenes...',
+              text: 'Loading images...',
 
             });
             Swal.showLoading();
@@ -270,7 +270,7 @@ export class ProjectComponent implements OnInit {
 
               Swal.fire({
                 icon: 'success',
-                title: 'Proyecto registrado exitosamente'
+                title: 'Project registration was successful'
 
               });
 
@@ -280,14 +280,14 @@ export class ProjectComponent implements OnInit {
               (err) => {
                 Swal.fire({
                   icon: 'error',
-                  title: 'Error cargando las imagenes del proyecto',
+                  title: 'Error loading images',
                   text: err
                 });
               });
           }else{
             Swal.fire({
               icon: 'success',
-              title: 'Proyecto registrado exitosamente'
+              title: 'Project registration was successful'
 
             });
 
@@ -303,7 +303,7 @@ export class ProjectComponent implements OnInit {
         (err) => {
           Swal.fire({
             icon: 'error',
-            title: 'Error al registrar el proyecto',
+            title: 'Error loading project',
             text: err
           });
           console.log(err);
@@ -337,7 +337,7 @@ export class ProjectComponent implements OnInit {
       Swal.fire({
         allowOutsideClick: false,
         icon: 'info',
-        text: 'Creando entidades asociadas...',
+        text: 'Loading associated entities...',
 
       });
       Swal.showLoading();
@@ -346,7 +346,7 @@ export class ProjectComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: 'Entidades asociadas exitosamente'
+          title: 'Associated entities registration was successful'
 
         });
 
@@ -356,7 +356,7 @@ export class ProjectComponent implements OnInit {
         (err) => {
           Swal.fire({
             icon: 'error',
-            title: 'Error creando entidades asociadas',
+            title: 'Error loading associated entities',
             text: err
           });
 

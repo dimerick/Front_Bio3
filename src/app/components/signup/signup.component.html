@@ -100,7 +100,7 @@
     
                             <div class="col-md-12">
                                 <label>Description:</label>
-                                <textarea name="description" placeholder="Ingrese su descripción personal"
+                                <textarea name="description" placeholder="Personal Description"
                                     class="validate-required" rows="4" formControlName="description"></textarea>
                                 <p *ngIf="signUpForm.get('description').invalid && signUpForm.get('description').touched"
                                     class="color--error">Your description is required</p>
@@ -126,7 +126,7 @@
                             <div class="col-12" *ngIf="!independentInvestigator">
                                 <label>Select Your University or <span><a (click)="toggleAddUniversity()" href="javascript: void(0)">¿Add a new university?</a></span></label>
                                 <ng-select class="custom" [items]="universities" bindLabel="name" bindValue="id"
-                                    formControlName="university" placeholder="Ingrese el nombre de su universidad"
+                                    formControlName="university" placeholder="Select Your University"
                                     (change)="onChange($event)"></ng-select>
                                 <p *ngIf="signUpForm.get('university').invalid && signUpForm.get('university').touched"
                                     class="color--error">Your university is required</p>

@@ -352,3 +352,7 @@
 .p-formatted{
    white-space: pre-wrap!important;
 }
+
+.bar .logo {
+   background-color: white!important;
+}

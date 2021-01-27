@@ -103,7 +103,23 @@ export class SignupComponent implements OnInit {
     }
 
     console.log(this.signUpForm);
-    let user: User = this.signUpForm.value;
+    let location = null;
+    if(this.signUpForm.value.independentInvestigator){
+      location = {
+        coordinates: [this.lon2, this.lat2],
+        type: "Point"
+      }
+    }
+    let user: User = {
+      id: null,
+      name: this.signUpForm.value.name,
+      last_name: this.signUpForm.value.last_name, 
+      email: this.signUpForm.value.email, 
+      ind_researcher: this.signUpForm.value.independentInvestigator, 
+      location: location
+
+
+    };
 
     Swal.fire({
       allowOutsideClick: false,
@@ -162,7 +178,7 @@ export class SignupComponent implements OnInit {
                         // this.modalActive = false;
                         Swal.fire({
                           icon: 'success',
-                          title: 'Registro exitoso'
+                          title: 'Your registration was successful'
 
                         });
                       },
@@ -175,7 +191,7 @@ export class SignupComponent implements OnInit {
                     // this.modalActive = false;
                     Swal.fire({
                       icon: 'success',
-                      title: 'Registro exitoso'
+                      title: 'Your registration was successful'
 
                     });
                   }
@@ -215,7 +231,7 @@ export class SignupComponent implements OnInit {
                         // this.modalActive = false;
                         Swal.fire({
                           icon: 'success',
-                          title: 'Registro exitoso'
+                          title: 'Your registration was successful'
 
                         });
                       },
@@ -228,7 +244,7 @@ export class SignupComponent implements OnInit {
                     // this.modalActive = false;
                     Swal.fire({
                       icon: 'success',
-                      title: 'Registro exitoso'
+                      title: 'Your registration was successful'
 
                     });
                   }
@@ -257,7 +273,7 @@ export class SignupComponent implements OnInit {
           console.log(err);
           Swal.fire({
             icon: 'error',
-            title: 'Error al registrarse',
+            title: 'Error creating user',
             text: ''
           });
 

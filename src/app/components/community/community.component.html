@@ -10,15 +10,15 @@
             <form [formGroup]="communityForm" (ngSubmit)="onSubmit()">
                 <div class="row">
                     <div class="col-md-12">
-                        <input type="text" placeholder="Ingrese el nombre de la comunidad" formControlName="name">
-                        <p *ngIf="communityForm.get('name').invalid && communityForm.get('name').touched" class="help is-danger">Debes
-                            ingresar el nombre de la comunidad</p>
+                        <label>Community Name:</label>
+                        <input type="text" placeholder="Community" formControlName="name">
+                        <p *ngIf="communityForm.get('name').invalid && communityForm.get('name').touched" class="help is-danger">The community name is required</p>
                     </div>
                     <div class="col-md-12">
                         
                         <p class="text-left">
-                            <b>Ubicación Comunidad</b>
-                            <br><em>De clic en el mapa para establecer la ubicación del marcador</em></p>
+                            <b>Community Location</b>
+                            <br><em>Choose the community location on the map</em></p>
                         
                         <div *ngIf="lat != 200 && lon != 200">
                             <app-map [markerDraggable]="true" [lat]="lat" [lon]="lon" [markerActive]="true" [zoom]="15" [height]="400" [layers]="layers"
@@ -27,7 +27,7 @@
                     </div>
                     
                     <div class="col-md-12">
-                        <button class="btn btn--primary type--uppercase" type="submit" [disabled]="communityForm.invalid">Enviar</button>
+                        <button class="btn btn--primary type--uppercase" type="submit" [disabled]="communityForm.invalid">Send</button>
                     </div>
                     
                 </div>

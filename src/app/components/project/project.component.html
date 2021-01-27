@@ -73,39 +73,35 @@
     
     
                         <div class="col-12">
-    
+                            <label>Project name:</label>
                             <ng-select class="custom" id="project-select" [items]="projects" bindLabel="name_uni" bindValue="id"
-                                formControlName="project" placeholder="Ingrese o suscribase a un proyecto existente" (change)="onChangeProject($event)" (search)="typingSearchProject($event)" (close)="closeProject()"></ng-select>
+                                formControlName="project" placeholder="Project name" (change)="onChangeProject($event)" (search)="typingSearchProject($event)" (close)="closeProject()"></ng-select>
                             <p *ngIf="projectForm.get('project').invalid && projectForm.get('project').touched"
-                                class="color--error">Debes
-                                ingresar el nombre del proyecto</p>
+                                class="color--error">Project name is required</p>
                         </div>
     
                         <!-- [addTag]="addProject" -->
     
                         <div class="col-md-12">
-                            <textarea placeholder="Ingrese la descripción del proyecto" class="validate-required" rows="4"
+                            <label>Project description:</label>
+                            <textarea placeholder="Project description" class="validate-required" rows="4"
                                 formControlName="description"></textarea>
                             <p *ngIf="projectForm.get('description').invalid && projectForm.get('description').touched"
-                                class="color--error">Debes
-                                ingresar la descripción del proyecto</p>
+                                class="color--error">Project description is required</p>
                         </div>
     
     
     
                         <div class="col-12">
+                            <label>Select the project location or <span><a (click)="toggleAddUniversity()" href="javascript: void(0)">¿Add a new university?</a></span></label>
                             <ng-select class="custom" [items]="universities" bindLabel="name" bindValue="id"
                                 formControlName="university"
-                                placeholder="Ingrese el nombre de la universidad donde se esta adelantando el proyecto"
+                                placeholder="Project location"
                                 (change)="onChangeUniversity($event)" [readonly]="mainUniversityDisabled"></ng-select>
                             <p *ngIf="projectForm.get('university').invalid && projectForm.get('university').touched"
-                                class="color--error">Debes
-                                ingresar la universidad en donde se está adelantando el proyecto</p>
-                            <span><a (click)="toggleAddUniversity()" href="javascript: void(0)">¿Agregar una nueva
-                                    universidad?</a></span>
-                            <br>
-                            <br>
-    
+                                class="color--error">Project location is required</p>
+                            
+                                <br>
                             <div *ngIf="lat != 200 && lon != 200">
                                 <app-map [lat]="lat" [lon]="lon" [markerDraggable]="false" [markerActive]="true" [zoom]="15"
                                     [height]="400" [layers]="layers" (markerMovedEvent)="markerMoved($event)"></app-map>
@@ -114,24 +110,21 @@
     
     
                         <div *ngIf="mainUniversitySelected" class="col-12">
-    
+                            <label>Select Associated Universities or <span><a (click)="toggleAddUniversity()" href="javascript: void(0)">¿Add a new university?</a></span></label>
                             <ng-select class="custom" [items]="universitiesAssociated" bindLabel="name" bindValue="id"
                                 formControlName="universitiesAssociated"
-                                placeholder="Ingrese el nombres de las universidades asociadas al proyecto"
+                                placeholder="Associated Universities"
                                 (change)="onChangeUniversitiesAssociated($event)" [multiple]="true"></ng-select>
-                            <p><a (click)="toggleAddUniversity()" href="javascript: void(0)">¿Agregar una nueva
-                                    universidad?</a></p>
+                            
     
                         </div>
     
                         <div class="col-12">
-    
+                            <label>Select Associated Communities or <span><a (click)="toggleAddCommunity()" href="javascript: void(0)">¿Add a new community?</a></span></label>
                             <ng-select class="custom" [items]="communitiesAssociated" bindLabel="name" bindValue="id"
                                 formControlName="communitiesAssociated"
-                                placeholder="Ingrese el nombres de las comunidades asociadas al proyecto"
+                                placeholder="Associated Communities"
                                 (change)="onChangeCommunitiesAssociated($event)" [multiple]="true"></ng-select>
-                            <p><a (click)="toggleAddCommunity()" href="javascript: void(0)">¿Agregar una nueva
-                                    comunidad?</a></p>
     
                         </div>
     
@@ -142,8 +135,7 @@
                         
                         <div class="col-12">
                             <p *ngIf="projectForm.get('universitiesAssociated').invalid && projectForm.get('communitiesAssociated').invalid"
-                            class="color--error">Debes
-                            ingresar al menos una universidad o comunidad asociada al proyecto</p>
+                            class="color--error">You must enter a university or community associated</p>
                             <button type="submit" class="btn btn--primary" >Create
                                 Project</button>
                                 <!-- [disabled]="projectForm.invalid" -->
